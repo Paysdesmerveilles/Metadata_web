@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Metadata implementation</title>
+
+		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" media="screen"
+		 href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script type="text/javascript"
+		 src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+		</script> 
+		<script type="text/javascript"
+		 src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+		</script>
+		<script type="text/javascript"
+		 src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+		</script>
+		
+  </head>
+
+  <body>
+
+	<div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="welcome.py">Centre de Donn&eacutees de G&eacuteothermie Profonde</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li href='index.py'><a href="index.py">Metadata implementation tool</a></li>
+            <li><a href="upload.py">Uploading metadata</a></li>
+			<li class="active" href='excel.py'><a href="excel.py">Excel tools</a></li>
+			<li><a href="about.py">About</a></li>
+            <li><a href="contact.py">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+	</div>
+	<div class="container">
+		<div class="page-header">
+        <h1><center>Excel Tools</center></h1>
+	</div>
+	</div>
+
+    <fieldset>
+	<p>
+	<h2>Excel Template</h2>
+	</p>
+<h4> The template can be used to create XML metadata and to follow the XML creation of files.</h4>
+ <h4>Click on the image logo to download the Excel template:</h4>
+ <a href="File/Template-excel.xlsm" download="template-excel.xlsm"><center>
+  <img src="File/excel.png" width="300" height="142"/></center>
+</a>
+<p><b>Version:</b> 24/11/2016</p>
+<p><b>Note:</b> The download attribute is not supported in Edge version 12, IE, Safari or Opera version 12 (and earlier).</p>
+
+</fieldset>
+
+<form method="post" action="excel2xml.py" enctype="multipart/form-data" >
+    <fieldset>
+	<p>
+	<h2> Create XML metadata using the Excel template</h2>
+	</p>
+	<p>
+	<h4>The Excel template should be uploaded from the Excel Template section (see top section). Then, you can upload your filled excel sheet here:</h4>
+   	</p>
+	<div class="container">
+  <input type="file" id="file" name="path" class="custom-file-input" accept=".xlsm" ">
+  <p>
+  <span class="custom-file-control col-xs-3"></span>
+  <center><button type="submit" class="btn btn-primary">Validate</button></center>
+<!--   <form name='getXlFileForm' action='excel2xml.py' method='post'  enctype='multipart/form-data'>
+        <input type='file' name='xlFileFromForm' />
+        <input type='submit' value='Upload' /> -->
+  </p>
+</div>
+</div>
+</form>
+</fieldset>
+    <fieldset>
+	<p>
+	<h2>Documentation</h2>
+	</p>
+<h4>To get more information about the procedure, please upload the documentation here: </h4>
+ <h4>Click on the image logo to download the documentation</h4>
+ <a href="File/Main_documentation.pdf" download="documentation.pdf"><center>
+  <img src="File/PDF.jpg" width="175" height="142"/></center>
+</a>
+<p><b>Version:</b> 24/11/2016</p>
+<p><b>Note:</b> The download attribute is not supported in Edge version 12, IE, Safari or Opera version 12 (and earlier).</p>
+
+</fieldset>
+
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
