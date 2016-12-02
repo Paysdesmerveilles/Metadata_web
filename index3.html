@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Metadata implementation</title>
+
+		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" media="screen"
+		 href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script type="text/javascript"
+		 src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+		</script> 
+		<script type="text/javascript"
+		 src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+		</script>
+		<script type="text/javascript"
+		 src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+		</script>
+		
+  </head>
+  <body>
+
+	<div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="welcome.py">Centre de Donn&eacutees de G&eacuteothermie Profonde</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active" href='index.py'><a href="#">Metadata implementation tool</a></li>
+            <li><a href="upload.py">Uploading metadata</a></li>
+			<li><a href="excel.py">Excel tools</a></li>
+			<li><a href="about.py">About</a></li>
+            <li><a href="contact.py">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+	<div class="container">
+		<div class="page-header">
+        <h1><center>Metadata implementation</center></h1>
+	</div>
+	</div>
+	</div>
+
+
+<form method="post" action="webapp.py">
+<fieldset>
+	<p><h2> Resource identification </h2></p>
+	<p>
+	<div class="form-group row">
+		<label for="title" class="col-xs-2 col-form-label">Title *</label>
+		<div class="col-xs-9">
+			<input class="form-control" type="text" name="title" required>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="abstract" class="col-xs-2 col-form-label">Abstract *</label>
+		<div class="col-xs-9">
+			<textarea class="form-control" name="abstract" rows="3" required></textarea>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="datatype" class="col-xs-2 col-form-label">Data Type *</label>
+		<div class="col-xs-9">
+		<select class="form-control" name="datatype">
+		  <option>Dataset</option>
+		  <option>Series</option>
+		  <option>Services</option>
+		</select>
+		</div>
+	</div>
+	</p>
+</fieldset>
+<fieldset>
+	<h2> Spatial and temporal extent</h2>
+
+ <p>
+	<legend> Geographic extent </legend>
+ </p>
+	<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Geographic coordinate system *</label>
+		<div class="col-xs-9">
+		<select class="form-control" name="geosys">
+		  <option>WGS84</option>
+		  <option>Lambert III</option>
+		</select>
+		</div>
+	</div>
+	</p>
+	<div class="form-check">
+		<div class="row">
+		<input type="radio" class="col-xs-1" name="radiogeo" value="point" required >
+		 <label class="col-xs-3 col-form-label">Point **: Longitude (&degN)</label>
+		  <input type="number"  min="-90" max="90" value="48.94" step="0.000001" class="col-xs-2 col-form-label" name="longitude" required>
+		  <label for="lat1" class="col-xs-2 col-form-label">Latitude (&degE)</label>
+		  <input type="number" min="-180" max="180" value="7.86" step="0.000001" class="col-xs-2 col-form-label" name="latitude"required>
+		</div>
+		<div class="row">
+		<input type="radio" class="col-xs-1" name="radiogeo" value="box" required>
+		<label class="col-xs-3 col-form-label">Bounding box **:</label>
+		</div>
+		<div class="row">  
+		<label for="space" class="col-xs-1 col-form-label"></label>
+		  <label class="col-xs-2 col-form-label">North (&degN)</label>
+		  <input type="number" min="document.getElementById('south').value" max="90" value="48.94"step="0.000001" class="col-xs-2 col-form-label" name="north"required>
+		  <label for="south" class="col-xs-2 col-form-label">South (&degN)</label>
+		  <input type="number" min="-90" max="90" value="48.93"step="0.000001" class="col-xs-2 col-form-label" name="south"required>
+		</div>
+		<div class="row">
+			<label for="space" class="col-xs-1 col-form-label"></label>
+		  <label for="east"class="col-xs-2 col-form-label">East(&degE)</label>
+		  <input type="number" min="-180" max="180" value="7.86" step="0.000001" class="col-xs-2 col-form-label" name="east" required>
+		  <label for="west" class="col-xs-2 col-form-label">West (&degE)</label>
+		  <span id="container">
+		  <input type="number" min="-180" max="180" value="7.87"step="0.000001" class="col-xs-2 col-form-label" name="west" required>
+		</span>
+	</div>
+	</div>
+	</p>
+	<P>
+	<div class="row">
+	  <label for="depth" class="col-xs-2 col-form-label">Depth : From (m)</label>
+	  <input type="number" class="col-xs-2 col-form-label" name="depth1">
+	  <label for="depth2" class="col-xs-2 col-form-label">to (m)</label>
+	  <input type="number"  min="-7000" max="0" class="col-xs-2 col-form-label" name="depth2">
+	  </div>
+	  </p>
+<p>
+	<legend> Temporal extent </legend>
+ </p>
+	<p>
+	<div class="form-check">
+		<div class="row">
+		<input type="radio" class="col-xs-2"  name="radiotime" value="extent" required>
+		<label class="col-xs-3 col-form-label">Temporal extent** :</label>
+		<label class="col-xs-3 col-form-label">Time interval</label>
+		</div>
+		<div class="row">
+		<label class="col-xs-3 col-form-label"></label>
+		<label class="col-xs-1 col-form-label"> Start</label>
+			<div id="datepicker" class="col-xs-3 input-append date" >
+				<input type="text" name="startdate" ></input>
+				<span class="add-on">
+					<i data-date-icon="icon-calendar"></i>
+				</span>
+				<script type="text/javascript">
+				  $('#datepicker').datetimepicker({
+					format: 'yyyy-MM-dd',
+					pickTime:false,
+				  });
+				</script>
+			</div>
+			<div id="timepicker1" class="col-xs-3 input-append date" >
+				<input type="text" name="starttime" value="00:00:00" ></input>
+				<span class="add-on">
+					<i data-time-icon="icon-time"></i>
+				</span>
+				<script type="text/javascript">
+				  $('#timepicker1').datetimepicker({
+					format: 'hh:mm:ss',
+					pickDate: false
+				  });
+				</script>
+			</div>
+		</div>
+		<div class="row">
+		<label class="col-xs-3 col-form-label"></label>
+		<label class="col-xs-1 col-form-label">End</label>
+			<div id="datepicker2" class="col-xs-3 input-append date">
+				<input type="text"name="enddate" min= ></input>
+				<span class="add-on">
+					<i  data-date-icon="icon-calendar"></i>
+				</span>
+				<script type="text/javascript">
+				  $('#datepicker2').datetimepicker({
+					format: 'yyyy-MM-dd',
+					pickTime:false
+					
+				  });
+				</script>
+			</div>
+			<div id="timepicker2" class="col-xs-3 input-append date">
+				<input type="text" name="endtime" value="00:00:00" ></input>
+				<span class="add-on">
+					<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+				</span>
+				<script type="text/javascript">
+				  $('#timepicker2').datetimepicker({
+					format: 'hh:mm:ss',
+					pickDate:false
+				  });
+				</script>
+			</div>
+		</div>
+		</p>
+		<p>
+		<div class="row">
+			<input type="radio" class="col-xs-2" name="radiotime" value="date" required>
+			<label class="col-xs-3 col-form-label">Temporal extent** : Date</label>
+			<div id="datepicker3" class="col-xs-3 input-append date">
+				<input type="text" name="date" ></input>
+				<span class="add-on">
+					<i data-date-icon="icon-calendar"></i>
+				</span>
+				<script type="text/javascript">
+				  $('#datepicker3').datetimepicker({
+					format: 'yyyy-MM-dd',
+					pickTime:false
+				  });
+				</script>
+			</div>
+			<div id="timepicker3" class="col-xs-3 input-append date">
+				<input type="text" name="time" value="00:00:00" ></input>
+				<span class="add-on">
+					<i data-time-icon="icon-time"></i>
+				</span>
+				<script type="text/javascript">
+				  $('#timepicker3').datetimepicker({
+					format: 'hh:mm:ss',
+					pickDate: false
+				  });
+				</script>
+			</div>
+		</div>
+	</div>
+	</p>
+<p>
+	<legend> Creation date </legend>
+ </p>
+	<p>
+	<div class="row">
+	<label class="col-xs-3 col-form-label">Creation date</label>
+		<div id="datepicker4" class="col-xs-3 input-append date">
+				<input type="text" name="creadate" required></input>
+				<span class="add-on">
+					<i data-date-icon="icon-calendar"></i>
+				</span>
+				<script type="text/javascript">
+				  $('#datepicker4').datetimepicker({
+					format: 'yyyy-MM-dd',
+					pickTime:false
+				  });
+				</script>
+			</div>
+			<div id="timepicker4" class="col-xs-3 input-append date">
+				<input type="text" name="creatime" value="00:00:00" required></input>
+				<span class="add-on">
+					<i data-time-icon="icon-time"></i>
+				</span>
+				<script type="text/javascript">
+				  $('#timepicker4').datetimepicker({
+					format: 'hh:mm:ss',
+					pickDate: false
+				  });
+				</script>
+			</div>
+		</div>
+	</p>
+
+</fieldset>
+<fieldset>	
+	<p><h2>Processing</h2></p>
+	<p>
+	<div class="row">
+		<label class="col-xs-2 col-form-label">Format *</label>
+		<select id="listformat1" class="multiselect col-xs-4" multiple="multiple">
+			  <option class="list-group-item">csv</option>
+			  <option class="list-group-item">mSEED</option>
+			  <option class="list-group-item">SEG-Y</option>
+			  <option class="list-group-item">pdf</option>
+			  <option class="list-group-item">jpg</option>
+		</select>
+		<div class="col-xs-1">
+			<input id="button1" type="button" value=">>" />
+			<br/>
+			<input id="button2" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listformat2" multiple="multiple" rows=2 name="format" required>        
+		</select>
+    </div>
+	<script language="JavaScript">
+		$(function(){
+			$("#button1").click(function(){
+				$("#listformat1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listformat2");
+				});
+			});
+		})
+		$(function(){
+			$("#button2").click(function(){
+				$("#listformat2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listformat1");
+				});
+			});
+		})
+	</script>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="quality" class="col-xs-2 col-form-label">Quality</label>
+		<div class="col-xs-9">
+			<input class="form-control" type="text" name="quality">
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="process" class="col-xs-2 col-form-label">Processing text</label>
+		<div class="col-xs-9">
+			<textarea class="form-control" id="process" rows="3" name="process"></textarea>
+		</div>
+	</div>
+	</p>
+</fieldset>
+<fieldset>
+	<p><h2> Keywords </h2></p>
+	<p>
+	<h4> Please select at least one keyword by categories </h4>
+	</p>
+	<div class="row">
+		<label class="col-xs-2 col-form-label">Subject study *</label>
+		<select id="listsubj1" class="multiselect col-xs-4" multiple="multiple">
+			  <option class="list-group-item">Hydraulics</option>
+			  <option class="list-group-item">Chemistry, Tracer test</option>
+			  <option class="list-group-item">Geology, Minerals</option>
+			  <option class="list-group-item">Gravimetry, Gravimetric measurements</option>
+			  <option class="list-group-item">Logging, Logs, Downhole methods, Drilling</option>
+			  <option class="list-group-item">Magnetotellurics, MT</option>
+			  <option class="list-group-item">Geodesy, InSAR</option>
+			  <option class="list-group-item">Fracture caracterisation, Fracture</option>
+			  <option class="list-group-item">Tectonics</option>
+			  <option class="list-group-item">Seismics, Seismic reflection, VSP, Vertical Seismic Profile</option>
+			  <option class="list-group-item">Modelisation</option>
+			  <option class="list-group-item">Seismology, Earthquakes, Seismic sources, Micro-seismicity</option>
+
+		</select>
+		<div class="col-xs-1">
+			<input id="button3" type="button" value=">>" />
+			<br/>
+			<input id="button4" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listsubj2" multiple="multiple" rows=2 name="subject" required>        
+		</select>
+    </div>
+	<script language="JavaScript">
+		$(function(){
+			$("#button3").click(function(){
+				$("#listsubj1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listsubj2");
+				});
+			});
+		})
+		$(function(){
+			$("#button4").click(function(){
+				$("#listsubj2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listsubj1");
+				});
+			});
+		})
+	</script>
+	</p>
+		<div class="row">
+		<label class="col-xs-2 col-form-label">Project Phase *</label>
+		<select id="listproj1" class="multiselect col-xs-4" multiple="multiple">
+			  <option class="list-group-item">Circulation</option>
+			  <option class="list-group-item">Hydraulic Stimulation</option>
+			  <option class="list-group-item">Drilling</option>
+			  <option class="list-group-item">Exploration</option>
+			  <option class="list-group-item">Injection Test</option>
+			  <option class="list-group-item">Exploitation</option>
+			  <option class="list-group-item">Chemical stimulation</option>
+			  <option class="list-group-item">Production Test</option>
+
+		</select>
+		<div class="col-xs-1">
+			<input id="button5" type="button" value=">>" />
+			<br/>
+			<input id="button6" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listproj2" multiple="multiple" rows=2 name="project" required>        
+		</select>
+    </div>
+	<script language="JavaScript">
+		$(function(){
+			$("#button5").click(function(){
+				$("#listproj1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listproj2");
+				});
+			});
+		})
+		$(function(){
+			$("#button6").click(function(){
+				$("#listproj2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listproj1");
+				});
+			});
+		})
+	</script>
+	</p>
+		<div class="row">
+		<label class="col-xs-2 col-form-label">Location *</label>
+		<select id="listloc1" class="multiselect col-xs-4" multiple="multiple">
+			  <option class="list-group-item">GPK1</option>
+			  <option class="list-group-item">GPK2</option>
+			  <option class="list-group-item">GPK3</option>
+			  <option class="list-group-item">GPK4</option>
+			  <option class="list-group-item">EPS1</option>
+			  <option class="list-group-item">Soultz-sous-For&ecircts (67250)</option>
+			  <option class="list-group-item">Upper Rhine Graben</option>
+			  <option class="list-group-item">Alsace</option>
+			  <option class="list-group-item">Rittershoffern (67690)</option>
+			  <option class="list-group-item">France</option>
+		</select>
+		<div class="col-xs-1">
+			<input id="button7" type="button" value=">>" />
+			<br/>
+			<input id="button8" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listloc2" multiple="multiple" rows=2 name="location" required>        
+		</select>
+    </div>
+	<script language="JavaScript">
+		$(function(){
+			$("#button7").click(function(){
+				$("#listloc1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listloc2");
+				});
+			});
+		})
+		$(function(){
+			$("#button8").click(function(){
+				$("#listloc2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listloc1");
+				});
+			});
+		})
+	</script>
+	</p>
+		<div class="row">
+		<label class="col-xs-2 col-form-label">Variables *</label>
+		<select id="listvar1" class="multiselect col-xs-4" multiple="multiple">
+			  <option class="list-group-item">T (Temperature)</option>
+			  <option class="list-group-item">P (Pressure)</option>
+			  <option class="list-group-item">Q, FLOW (Flow rate)</option>
+			  <option class="list-group-item">Density logs (RHOB, DECA, DRHOB, ...)</option>
+			  <option class="list-group-item">Imagery logs (ARI, BHTV, FMS, BI FMI, ...)</option>
+			  <option class="list-group-item">PHI (Porosity)</option>
+			  <option class="list-group-item">Hole caracterisation (Hole azimuth, radius, caliper, inclination, trajectry, deviation, ...)</option>
+			  <option class="list-group-item">Magnetic parameters (FNOR, FX, FY, FZ, ...)</option>
+			  <option class="list-group-item">V (Volume of water)</option>
+			  <option class="list-group-item">Velocities and slowness logs (DTP, DTS, DTST, VP/VS)</option>
+			  <option class="list-group-item">GR (Gamma Ray)</option>
+			  <option class="list-group-item">Other</option>
+			  <option class="list-group-item">Seismology parameters</option>
+			  <option class="list-group-item">Resistivity logs (MPHI, IDPH, ILD, ILM, MSFL, LLD, LLS)</option>
+			  <option class="list-group-item">Drilling parameters (drilling rate, velocity, WOH, WOB, Rate of penetration, ...)</option>
+			  <option class="list-group-item">Chemical content (U, Th, O2, CH4, CO2, H2S, K, ...)</option>
+			  <option class="list-group-item">Geological log (Age, Unit, Fracture, Minerals content, Petrographical description ...)</option>
+			  <option class="list-group-item">Elastic properties (Young modulus, Poisson ratio, ...)</option>
+			  <option class="list-group-item">Ph (pH)</option>
+	  
+		</select>
+		<div class="col-xs-1">
+			<input id="button9" type="button" value=">>" />
+			<br/>
+			<input id="button10" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listvar2" multiple="multiple" rows=2 name="variables" required>        
+		</select>
+    </div>
+	<script language="JavaScript">
+		$(function(){
+			$("#button9").click(function(){
+				$("#listvar1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listvar2");
+				});
+			});
+		})
+		$(function(){
+			$("#button10").click(function(){
+				$("#listvar2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listvar1");
+				});
+			});
+		})
+	</script>
+	</p>
+</fieldset>
+<fieldset>
+	<p><h2> Constraints </h2></p>
+	<p>
+	<p>
+	<div class="form-group row">
+		<label for="access" class="col-xs-2 col-form-label">Access constraints *</label>
+		<div class="col-xs-9">
+		<select class="form-control" name="access">
+		  <option>Restricted</option>
+		  <option>Public</option>
+		  <option>Embargo</option>
+		</select>
+		</div>
+	</div>
+	</p>
+	<div class="form-group row">
+		<label for="use" class="col-xs-2 col-form-label">Use limitation</label>
+		<div class="col-xs-9">
+			<input class="form-control" type="text" name="use">
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="citation" class="col-xs-2 col-form-label">Citation</label>
+		<div class="col-xs-9">
+			<textarea class="form-control" name="citation" rows="3" ></textarea>
+		</div>
+	</div>
+	</p>
+
+</fieldset>
+<fieldset>
+<p>
+	<h2> Contact</h2>
+</p>
+	<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Owner of the data *</label>
+		<div class="col-xs-9">
+		<select class="form-control" id="datatype" name="owner">
+		  <option>EOST/ IPGS</option>
+		  <option>BRGM</option>
+		  <option>ESG</option>
+		  <option>GEIE</option>
+		</select>
+		</div>
+	</div>
+	</p>
+		<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Distributor *</label>
+		<div class="col-xs-9">
+		<select class="form-control" id="datatype" name="distributor">
+		  <option>EOST/ IPGS</option>
+		  <option>BRGM</option>
+		  <option>ESG</option>
+		  <option>GEIE</option>
+		</select>
+		</div>
+	</div>
+	</p>
+		<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Resource contact *</label>
+		<div class="col-xs-9">
+		<select class="form-control" id="datatype" name="resource">
+		  <option>EOST/ IPGS</option>
+		  <option>BRGM</option>
+		  <option>ESG</option>
+		  <option>GEIE</option>
+		</select>
+		</div>
+	</div>
+	</p>
+	  <p>
+   </div>
+  <center><button type="submit" class="btn btn-primary">Submit</button></center>
+</p>
+</fieldset>
+
+</form>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+
+  </body>
+</html>
