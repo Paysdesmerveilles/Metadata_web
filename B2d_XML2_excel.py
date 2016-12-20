@@ -12,8 +12,7 @@ def xml(title, abstract,data_type,North,East,South,West,Depth1,Depth2,T1,T2,Crea
         reader = csv.reader(f, delimiter=';')
         contact_list = list(reader) 
     #Changement de direction
-    from os import chdir
-    import matplotlib.pyplot as plt
+
     # Les variables sont chargés via le formulaire développé dans test5_widget.py
     # Le chargement 
     #Analyser le fichier xml pour remplacer les attributs voulus
@@ -130,8 +129,6 @@ def xml(title, abstract,data_type,North,East,South,West,Depth1,Depth2,T1,T2,Crea
         elif tree.getpath(e)=="/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_RestrictionCode":
             access_xml=e   
     
-    print(name)
-    #Remplisage du fichier xml pour chaque donnée
     
     Title_xml.text=title
     Abstract_xml.text=abstract
@@ -202,8 +199,10 @@ def xml(title, abstract,data_type,North,East,South,West,Depth1,Depth2,T1,T2,Crea
         condition_contact(owner2, OW2_Organisation_xml,OW2_Adress_xml, OW2_City_xml,OW2_Postalcode_xml , OW2_Country_xml, OW2_email_xml, contact_list)
 #    if owner1==0:
 #        OW1_xml.remove(OW1_xml[0])      
-    doc.write('File/XML/%s.xml' %name, xml_declaration=True)
-    
+    doc.write('File/tmp/XML/%s.xml' %name, xml_declaration=True)
+#    print(" - %s" %name)
+#    print('''
+#    ''')
     
 def condition_contact(type_contact, organisation, adress, city, post_code, country, mail, contact_list):
     if type_contact=='EOST/ IPGS':

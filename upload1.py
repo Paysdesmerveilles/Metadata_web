@@ -696,9 +696,16 @@ print("""
 		<label for="access" class="col-xs-2 col-form-label">Access constraints *</label>
 		<div class="col-xs-9">
 		<select class="form-control" name="access">
-		  <option>Restricted</option>
-		  <option>Public</option>
-		  <option>Embargo</option>
+""")
+access_constraint=['Confidentiality Level 0: Public','Confidentiality Level 1: Public and traceability','Confidentiality Level 2: Restricted','Confidentiality Level 3: Case-by-case']
+for i in range(0, len(access_constraint)):
+    if access==access_constraint[i]:
+        access_constraint[i]=0
+    if access_constraint[i]!=0:
+        
+        print('<option>%s</option>' %access_constraint[i])
+print('<option selected="selected">%s</option>' %access)
+print("""
 		</select>
 		</div>
 	</div>
