@@ -5,7 +5,6 @@ Created on Thu Oct 27 16:29:52 2016
 @author: Standard
 """
 import cgi, cgitb
-import cgi
 import XML_B2d2
 cgitb.enable()
 form = cgi.FieldStorage()

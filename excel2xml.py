@@ -202,6 +202,7 @@ subject_Study=columns[17]
 project_Phase=columns[18]
 location=columns[19]
 variables=columns[20]
+
 for i in range (0, len(name)):
     if type(format1[i])==str:
         format1[i]=format1[i].split(';')
