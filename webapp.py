@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
+"""
+Created on Thu Oct 27 16:29:52 2016
 
+@author: Standard
+"""
 # Import modules for CGI handling
 import cgi
 import B2d_XML2

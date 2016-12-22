@@ -12,13 +12,13 @@ cgitb.enable()
 ########## GET THE XML FILE FROM THE HTML FORM  ##############
 #############################################################
 form = cgi.FieldStorage()
-filePath=form["path"].value
+filePath = form["path"].value
 
 ##############################################################
 ######### RUN THE PROGRAM THAT READ XML METADATA ############
 #############################################################
-  
-title, abstract,data_type,North,East,South,West,Depth1,Depth2,T1, T2, T3, t1,h1,t2,h2,Creation_date,subject_Study, project_Phase, location, variables, format1, quality,process, use_lim,access,citation, resource_contact, owner1, owner2, distributor=XML_B2d2.xml2B2d(filePath)
+
+title, abstract, data_type, North, East, South, West, Depth1, Depth2, T1, T2, T3, t1, h1, t2, h2, Creation_date, subject_Study, project_Phase, location, variables, format1, quality, process, use_lim, access, citation, resource_contact, owner1, owner2, distributor = XML_B2d2.xml2B2d(filePath)
 print("Content-type: text/html; charset=utf-8\n")
 #print('%s est le chemin du fichier' %filePath)
 #Les contrôles
@@ -26,8 +26,7 @@ print("Content-type: text/html; charset=utf-8\n")
 ##############################################################
 ########## DISPLAY THE METADATA INTO THE FORM  ##############
 #############################################################
-
-html1="""
+print("""
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -90,20 +89,16 @@ html1="""
 <p><h2> Resource identification </h2></p>
 <p>
 <div class="form-group row">
-<label for="title" class="col-xs-2 col-form-label">Title</label>"""
-
-print(html1)
-print('<div class="col-xs-9"><input class="form-control" type="text" name="title" value="%s" required>' %title)			
-html2="""</div>
+<label for="title" class="col-xs-2 col-form-label">Title</label>""")
+print('<div class="col-xs-9"><input class="form-control" type="text" name="title" value="%s" required>' %title)		
+print("""</div>
 	</div>
 	</p>
 	<p>
 	<div class="form-group row">
 		<label for="abstract" class="col-xs-2 col-form-label">Abstract</label>
-		<div class="col-xs-9">"""
-print(html2)
-print('<textarea class="form-control" name="abstract" rows="3" required>%s</textarea>' %abstract )
-
+		<div class="col-xs-9">""")
+print('<textarea class="form-control" name="abstract" rows="3" required>%s</textarea>' %abstract)
 print("""</div>
 	</div>
 	</p>
@@ -112,12 +107,12 @@ print("""</div>
 		<label for="datatype" class="col-xs-2 col-form-label">Data Type</label>
 		<div class="col-xs-9">
 		<select class="form-control" name="datatype">""")
-  
-dataType_list=['Dataset', 'Series', 'Services']
+
+dataType_list = ['Dataset', 'Series', 'Services']
 for i in range(0, len(dataType_list)):
-    if data_type==dataType_list[i]:
-        dataType_list[i]=0
-    if dataType_list[i]!=0:
+    if data_type == dataType_list[i]:
+        dataType_list[i] = 0
+    if dataType_list[i] != 0:
         print('<option >%s</option>' %dataType_list[i])
 print('<option selected="selected">%s</option>' %data_type)
 
@@ -147,13 +142,13 @@ print("""		</select>
 		<div class="row">""")
 
 #Spatial extent
-if North==South and East==West:
+if North == South and East == West:
     print("""	<input type="radio" class="col-xs-1" name="radiogeo" value="point" required checked>
     <label class="col-xs-3 col-form-label">Point **: Longitude (&degN)</label>""")
     print('<input type="number"  min="-90" max="90" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="longitude" required>' % North)
     print('<label for="lat1" class="col-xs-2 col-form-label">Latitude (&degE)</label>')
     print('<input type="number" min="-180" max="180" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="latitude"required>' % East)
-    print("""    
+    print("""
           </div>
 		<div class="row">
 		<input type="radio" class="col-xs-1" name="radiogeo" value="box" required>
@@ -210,7 +205,7 @@ else:
 	<P>""")
 #End spatial extent
 #Depth
-if type(Depth1)==float and type(Depth2)==float:
+if isinstance(Depth1, float) and isinstance(Depth2, float):
     print("""<div class="row">
     	  <label for="depth" class="col-xs-2 col-form-label">Depth : From (m)</label>""")
     print('<input type="number" class="col-xs-2 col-form-label" name="depth1" value="%f">' %Depth1)
@@ -222,7 +217,7 @@ else:
     <input type="number" class="col-xs-2 col-form-label" name="depth1">
     <label for="depth2" class="col-xs-2 col-form-label">to (m)</label>
     <input type="number"  min="-7000" max="0" class="col-xs-2 col-form-label" name="depth2" >""")
-    
+
 
 #Temporal extent
 print(""" </div>
@@ -233,7 +228,7 @@ print(""" </div>
 	<p>
 	<div class="form-check">
 		<div class="row">""")
-if T3==1:
+if T3 == 1:
     print('<input type="radio" class="col-xs-2"  name="radiotime" value="extent" required checked>')
     print("""
 		<label class="col-xs-3 col-form-label">Temporal extent** :</label>
@@ -330,9 +325,9 @@ if T3==1:
 	</div>
 	</p>
 <p>""")
-    
+
 else:
-    print("""   
+    print("""
 		<input type="radio" class="col-xs-2"  name="radiotime" value="extent" required>
 		<label class="col-xs-3 col-form-label">Temporal extent** :</label>
 		<label class="col-xs-3 col-form-label">Time interval</label>
@@ -438,7 +433,7 @@ print("""
 	<div class="row">
 	<label class="col-xs-3 col-form-label">Creation date</label>
 		<div id="datepicker4" class="col-xs-3 input-append date">""")
-(t3, h3)=Creation_date.split('T')
+(t3, h3) = Creation_date.split('T')
 print('<input type="text" name="creadate" value="%s" required></input>' %t3)
 print("""
 				<span class="add-on">
@@ -474,21 +469,21 @@ print("""
 	<div class="row">
 		<label class="col-xs-2 col-form-label">Format *</label>
 		<select id="listformat1" class="multiselect col-xs-4" multiple="multiple">""")
-format1_list=['csv','mSEED','SEG-Y','pdf','jpg', 'excel', 'text']
+format1_list = ['csv', 'mSEED', 'SEG-Y', 'pdf', 'jpg', 'excel', 'text']
 for i in range(0, len(format1_list)):
     for j in range(0, len(format1)):
-        if format1[j]==format1_list[i]:
-            format1_list[i]=0
-    if format1_list[i]!=0:
+        if format1[j] == format1_list[i]:
+            format1_list[i] = 0
+    if format1_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %format1_list[i])
-        
+
 print("""	</select>
 		<div class="col-xs-1">
 			<input id="button1" type="button" value=">>" />
 			<br/>
 			<input id="button2" type="button" value="<<" />
 		</div>
-		<select class="multiselect col-xs-4" id="listformat2" multiple="multiple" rows=2 name="format" required> """   )
+		<select class="multiselect col-xs-4" id="listformat2" multiple="multiple" rows=2 name="format" required> """)
 for j in range(0, len(format1)):
     print('<option class="list-group-item">%s</option>' %format1[j])
 
@@ -528,10 +523,25 @@ print("""
 print('<textarea class="form-control" id="process" rows="3" name="process">%s</textarea>' %process)
 
 #Keywords:
-Subject_list=['Hydraulics','Chemistry, Tracer test','Geology, Minerals','Gravimetry, Gravimetric measurements','Logging, Logs, Downhole methods, Drilling','Magnetotellurics, MT','Geodesy, InSAR','Fracture caracterisation, Fracture,Tectonics','Seismics, Seismic reflection, VSP, Vertical Seismic Profile','Modelisation','Seismology, Earthquakes, Seismic sources, Micro-seismicity']
-Project_list=['Circulation','Hydraulic Stimulation','Drilling','Exploration','Injection Test','Exploitation','Chemical stimulation','Production Test']
-location_list=['GPK1','GPK2','GPK3','GPK4','EPS1','Soultz-sous-Forêts (67250)','Upper Rhine Graben','Alsace','Rittershoffern (67690)','France']
-variable_list=['T (Temperature)','P (Pressure)','Q, FLOW (Flow rate)','Density logs (RHOB, DECA, DRHOB, ...)','Imagery logs (ARI, BHTV, FMS, BI FMI, ...)','PHI (Porosity)','Hole caracterisation (Hole azimuth, radius, caliper, inclination, trajectry, deviation, ...)','Magnetic parameters (FNOR, FX, FY, FZ, ...)','V (Volume of water)','Velocities and slowness logs (DTP, DTS, DTST, VP/VS)','GR (Gamma Ray)','Other','Seismology parameters','Resistivity logs (MPHI, IDPH, ILD, ILM, MSFL, LLD, LLS)','Drilling parameters (drilling rate, velocity, WOH, WOB, Rate of penetration, ...)','Chemical content (U, Th, O2, CH4, CO2, H2S, K, ...)','Geological log (Age, Unit, Fracture, Minerals content, Petrographical description ...)','Elastic properties (Young modulus, Poisson ratio, ...)','Ph (pH)']
+Subject_list = ['Hydraulics', 'Chemistry, Tracer test', 'Geology, Minerals',
+                'Gravimetry, Gravimetric measurements', 'Logging, Logs, Downhole methods, Drilling',
+                'Magnetotellurics, MT', 'Geodesy, InSAR', 'Fracture caracterisation, Fracture,Tectonics',
+                'Seismics, Seismic reflection, VSP, Vertical Seismic Profile', 'Modelisation',
+                'Seismology, Earthquakes, Seismic sources, Micro-seismicity']
+Project_list = ['Circulation', 'Hydraulic Stimulation', 'Drilling', 'Exploration', 'Injection Test',
+                'Exploitation', 'Chemical stimulation', 'Production Test']
+location_list = ['GPK1', 'GPK2', 'GPK3', 'GPK4', 'EPS1', 'Soultz-sous-Forêts (67250)',
+                 'Upper Rhine Graben', 'Alsace', 'Rittershoffern (67690)', 'France']
+variable_list = ['T (Temperature)', 'P (Pressure)', 'Q, FLOW (Flow rate)',
+                 'Density logs (RHOB, DECA, DRHOB, ...)', 'Imagery logs (ARI, BHTV, FMS, BI FMI, ...)',
+                 'PHI (Porosity)', 'Hole caracterisation (Hole azimuth, radius, caliper, inclination, trajectry, deviation, ...)',
+                 'Magnetic parameters (FNOR, FX, FY, FZ, ...)', 'V (Volume of water)',
+                 'Velocities and slowness logs (DTP, DTS, DTST, VP/VS)', 'GR (Gamma Ray)',
+                 'Other', 'Seismology parameters', 'Resistivity logs (MPHI, IDPH, ILD, ILM, MSFL, LLD, LLS)',
+                 'Drilling parameters (drilling rate, velocity, WOH, WOB, Rate of penetration, ...)',
+                 'Chemical content (U, Th, O2, CH4, CO2, H2S, K, ...)',
+                 'Geological log (Age, Unit, Fracture, Minerals content, Petrographical description ...)',
+                 'Elastic properties (Young modulus, Poisson ratio, ...)', 'Ph (pH)']
 print("""
 		</div>
 	</div>
@@ -547,9 +557,9 @@ print("""
 		<select id="listsubj1" class="multiselect col-xs-4" multiple="multiple">""")
 for i in range(0, len(Subject_list)):
     for j in range(0, len(subject_Study)):
-        if subject_Study[j]==Subject_list[i]:
-            Subject_list[i]=0
-    if Subject_list[i]!=0:
+        if subject_Study[j] == Subject_list[i]:
+            Subject_list[i] = 0
+    if Subject_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %Subject_list[i])
 print("""
 		</select>
@@ -558,9 +568,9 @@ print("""
 			<br/>
 			<input id="button4" type="button" value="<<" />
 		</div>
-		<select class="multiselect col-xs-4" id="listsubj2" multiple="multiple" rows=2 name="subject" required> """ )
+		<select class="multiselect col-xs-4" id="listsubj2" multiple="multiple" rows=2 name="subject" required> """)
 for j in range(0, len(subject_Study)):
-    print('<option class="list-group-item">%s</option>' %subject_Study[j])     
+    print('<option class="list-group-item">%s</option>' %subject_Study[j])
 print("""
 		</select>
     </div>
@@ -586,9 +596,9 @@ print("""
 		<select id="listproj1" class="multiselect col-xs-4" multiple="multiple">""")
 for i in range(0, len(Project_list)):
     for j in range(0, len(project_Phase)):
-        if project_Phase[j]==Project_list[i]:
-            Project_list[i]=0
-    if Project_list[i]!=0:
+        if project_Phase[j] == Project_list[i]:
+            Project_list[i] = 0
+    if Project_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %Project_list[i])
 print("""
 		</select>
@@ -599,7 +609,7 @@ print("""
 		</div>
 		<select class="multiselect col-xs-4" id="listproj2" multiple="multiple" rows=2 name="project" required>""")
 for j in range(0, len(project_Phase)):
-    print('<option class="list-group-item">%s</option>' %project_Phase[j])     
+    print('<option class="list-group-item">%s</option>' %project_Phase[j])
 print("""
 		</select>
     </div>
@@ -625,9 +635,9 @@ print("""
 		<select id="listloc1" class="multiselect col-xs-4" multiple="multiple">""")
 for i in range(0, len(location_list)):
     for j in range(0, len(location)):
-        if location[j]==location_list[i]:
-            location_list[i]=0
-    if location_list[i]!=0:
+        if location[j] == location_list[i]:
+            location_list[i] = 0
+    if location_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %location_list[i])
 print("""
 		</select>
@@ -638,8 +648,8 @@ print("""
 		</div>
 		<select class="multiselect col-xs-4" id="listloc2" multiple="multiple" rows=2 name="location" required>""")
 for j in range(0, len(location)):
-    print('<option class="list-group-item">%s</option>' %location[j])     
-print("""   
+    print('<option class="list-group-item">%s</option>' %location[j])
+print("""
 		</select>
     </div>
 	<script language="JavaScript">
@@ -664,11 +674,11 @@ print("""
 		<select id="listvar1" class="multiselect col-xs-4" multiple="multiple">""")
 for i in range(0, len(variable_list)):
     for j in range(0, len(variables)):
-        if variables[j]==variable_list[i]:
-            variable_list[i]=0
-    if variable_list[i]!=0:
+        if variables[j] == variable_list[i]:
+            variable_list[i] = 0
+    if variable_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %variable_list[i])
-print("""    
+print("""
 	</select>
 		<div class="col-xs-1">
 			<input id="button9" type="button" value=">>" />
@@ -677,8 +687,8 @@ print("""
 		</div>
 		<select class="multiselect col-xs-4" id="listvar2" multiple="multiple" rows=2 name="variables" required>""")
 for j in range(0, len(variables)):
-    print('<option class="list-group-item">%s</option>' %variables[j])     
-print("""    
+    print('<option class="list-group-item">%s</option>' %variables[j])
+print("""
 		</select>
     </div>
 	<script language="JavaScript">
@@ -708,12 +718,13 @@ print("""
 		<div class="col-xs-9">
 		<select class="form-control" name="access">
 """)
-access_constraint=['Confidentiality Level 0: Public','Confidentiality Level 1: Public and traceability','Confidentiality Level 2: Restricted','Confidentiality Level 3: Case-by-case']
+access_constraint = ['Confidentiality Level 0: Public', 'Confidentiality Level 1: Public and traceability',
+                     'Confidentiality Level 2: Restricted', 'Confidentiality Level 3: Case-by-case']
 for i in range(0, len(access_constraint)):
-    if access==access_constraint[i]:
-        access_constraint[i]=0
-    if access_constraint[i]!=0:
-        
+    if access == access_constraint[i]:
+        access_constraint[i] = 0
+    if access_constraint[i] != 0:
+
         print('<option>%s</option>' %access_constraint[i])
 print('<option selected="selected">%s</option>' %access)
 print("""
@@ -725,7 +736,7 @@ print("""
 		<label for="use" class="col-xs-2 col-form-label">Use limitation</label>
 		<div class="col-xs-9">""")
 print('<input class="form-control" type="text" name="use" value="%s">' %use_lim)
-print("""    
+print("""
 		</div>
 	</div>
 	</p>
@@ -734,7 +745,8 @@ print("""
 		<label for="citation" class="col-xs-2 col-form-label">Citation</label>
 		<div class="col-xs-9">""")
 print('<textarea class="form-control" name="citation" rows="3" >%s</textarea>' %citation)
-print("""		</div>
+print("""
+	</div>
 	</div>
 	</p>
 
@@ -748,12 +760,12 @@ print("""		</div>
 		<label for="geosys" class="col-xs-2 col-form-label">Owner of the data *</label>
 		<div class="col-xs-9">
 		<select class="form-control"  name="owner">""")
-institution_list=['EOST/ IPGS','BRGM','ESG','GEIE']
+institution_list = ['EOST/ IPGS', 'BRGM', 'ESG', 'GEIE']
 for i in range(0, len(institution_list)):
-    if owner1==institution_list[i]:
-        institution_list[i]=0
-    if institution_list[i]!=0:
-        
+    if owner1 == institution_list[i]:
+        institution_list[i] = 0
+    if institution_list[i] != 0:
+
         print('<option>%s</option>' %institution_list[i])
 print('<option selected="selected">%s</option>' %owner1)
 print("""
@@ -767,9 +779,9 @@ print("""
 		<div class="col-xs-9">
 		<select class="form-control"  name="distributor">""")
 for i in range(0, len(institution_list)):
-    if owner1==institution_list[i]:
-        institution_list[i]=0
-    if institution_list[i]!=0:
+    if owner1 == institution_list[i]:
+        institution_list[i] = 0
+    if institution_list[i] != 0:
         print('<option>%s</option>' %institution_list[i])
 print('<option selected="selected">%s</option>' %distributor)
 print("""
@@ -783,9 +795,9 @@ print("""
 		<div class="col-xs-9">
 		<select class="form-control"  name="resource">""")
 for i in range(0, len(institution_list)):
-    if owner1==institution_list[i]:
-        institution_list[i]=0
-    if institution_list[i]!=0:
+    if owner1 == institution_list[i]:
+        institution_list[i] = 0
+    if institution_list[i] != 0:
         print('<option >%s</option>' %institution_list[i])
 print('<option selected="selected">%s</option>' %resource_contact)
 print("""
