@@ -7,13 +7,25 @@ Created on Thu Oct 27 16:29:52 2016
 import cgi, cgitb
 import XML_B2d2
 cgitb.enable()
+
+##############################################################
+########## GET THE XML FILE FROM THE HTML FORM  ##############
+#############################################################
 form = cgi.FieldStorage()
 filePath=form["path"].value
+
+##############################################################
+######### RUN THE PROGRAM THAT READ XML METADATA ############
+#############################################################
   
 title, abstract,data_type,North,East,South,West,Depth1,Depth2,T1, T2, T3, t1,h1,t2,h2,Creation_date,subject_Study, project_Phase, location, variables, format1, quality,process, use_lim,access,citation, resource_contact, owner1, owner2, distributor=XML_B2d2.xml2B2d(filePath)
 print("Content-type: text/html; charset=utf-8\n")
 #print('%s est le chemin du fichier' %filePath)
 #Les contrôles
+
+##############################################################
+########## DISPLAY THE METADATA INTO THE FORM  ##############
+#############################################################
 
 html1="""
 <html lang="en">
@@ -59,7 +71,7 @@ html1="""
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active" href='index.py'><a href="#">Metadata implementation tool</a></li>
+            <li class="active" href='index.py'><a href='index.py'>Metadata implementation tool</a></li>
             <li><a href="upload.py">Uploading metadata</a></li>
 			<li><a href="excel.py">Excel tools</a></li>
 			<li><a href="about.py">About</a></li>

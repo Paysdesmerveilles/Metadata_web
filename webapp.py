@@ -1,89 +1,101 @@
 # -*- coding: utf-8 -*-
 
-# Import modules for CGI handling 
-import cgi 
+# Import modules for CGI handling
+import cgi
 import B2d_XML2
+
+##############################################################
+########## GET THE VALUE FROM THE HTML FORM  ################
+#############################################################
 form = cgi.FieldStorage()
 
-      
-        
-title=form.getvalue("title")
-abstract=form.getvalue("abstract")
-data_type=form.getvalue("datatype")
-geosys=form.getvalue("geosys")
-longitude=form.getvalue("longitude")
-latitude=form.getvalue("latitude")
-North=form.getvalue("north")
-South=form.getvalue("south")
-East=form.getvalue("east")
-West=form.getvalue("west")
-Depth1=form.getvalue("depth1")
-Depth2=form.getvalue("depth2")
-radiotime=form.getvalue("radiotime")
-if radiotime=='extent':
-    startdate=form.getvalue("startdate")
-    starttime=form.getvalue("starttime")
-    T1=startdate+'T'+starttime
-    enddate=form.getvalue("enddate")
-    endtime=form.getvalue("endtime")
-    T2=enddate+'T'+endtime
-    T3=1
-elif radiotime=='date':
-    date=form.getvalue("date")
-    time=form.getvalue("time")
-    T1=date+'T'+time
-    T2=''
-    T3=0
-creadate=form.getvalue("creadate")
-creatime=form.getvalue("creatime")
-Creation_date=creadate+'T'+creatime
-format1=form.getvalue("format")
-subject_Study=form.getvalue("subject")
-project_Phase=form.getvalue("project")
-location=form.getvalue("location")
-variables=form.getvalue("variables")
-quality=form.getvalue("quality")
-process=form.getvalue("process")
-resource_contact=form.getvalue("resource")
-owner1=form.getvalue("owner")
-distributor=form.getvalue("distributor")
-use_lim=form.getvalue("use")
-access=form.getvalue("access")
-citation=form.getvalue("citation")
-radiotime=form.getvalue("radiotime")
+title = form.getvalue("title")
+abstract = form.getvalue("abstract")
+data_type = form.getvalue("datatype")
+geosys = form.getvalue("geosys")
+longitude = form.getvalue("longitude")
+latitude = form.getvalue("latitude")
+North = form.getvalue("north")
+South = form.getvalue("south")
+East = form.getvalue("east")
+West = form.getvalue("west")
+Depth1 = form.getvalue("depth1")
+Depth2 = form.getvalue("depth2")
+radiotime = form.getvalue("radiotime")
+if radiotime == 'extent':
+    startdate = form.getvalue("startdate")
+    starttime = form.getvalue("starttime")
+    T1 = startdate + 'T' + starttime
+    enddate = form.getvalue("enddate")
+    endtime = form.getvalue("endtime")
+    T2 = enddate + 'T' + endtime
+    T3 = 1
+elif radiotime == 'date':
+    date = form.getvalue("date")
+    time = form.getvalue("time")
+    T1 = date + 'T' + time
+    T2 = ''
+    T3 = 0
+creadate = form.getvalue("creadate")
+creatime = form.getvalue("creatime")
+Creation_date = creadate+'T'+creatime
+format1 = form.getvalue("format")
+subject_Study = form.getvalue("subject")
+project_Phase = form.getvalue("project")
+location = form.getvalue("location")
+variables = form.getvalue("variables")
+quality = form.getvalue("quality")
+process = form.getvalue("process")
+resource_contact = form.getvalue("resource")
+owner1 = form.getvalue("owner")
+distributor = form.getvalue("distributor")
+use_lim = form.getvalue("use")
+access = form.getvalue("access")
+citation = form.getvalue("citation")
+radiotime = form.getvalue("radiotime")
 
 
 
-if type(format1)==str:
-    temp=[]
+if isinstance(format1, str):
+    temp = []
     temp.append(format1)
-    format1=[format1]
-if type(subject_Study)==str:
-    temp=[]
+    format1 = [format1]
+if isinstance(subject_Study, str):
+    temp = []
     temp.append(subject_Study)
-    subject_Study=[subject_Study]
-if type(project_Phase)==str:
-    temp=[]
+    subject_Study = [subject_Study]
+if isinstance(project_Phase,str):
+    temp = []
     temp.append(project_Phase)
-    project_Phase=[project_Phase]
-if type(location)==str:
-    temp=[]
+    project_Phase = [project_Phase]
+if isinstance(location, str):
+    temp = []
     temp.append(location)
-    location=[location]
-if type(variables)==str:
-    temp=[]
+    location = [location]
+if isinstance(variables, str):
+    temp = []
     temp.append(variables)
-    variables=[variables]
+    variables = [variables]
 
-B2d_XML2.xml(title, abstract,data_type,North,East,South,West,Depth1,Depth2,T1,T2,Creation_date,subject_Study, project_Phase, location, variables, format1, quality,process, use_lim,access,citation, resource_contact, owner1, owner1, distributor)
+##############################################################
+########## TRANSFORM VALUE INTO XML METADATA  ################
+#############################################################
 
-html1="""
+B2d_XML2.xml(title, abstract, data_type, North, East, South,
+             West, Depth1, Depth2, T1, T2, Creation_date, subject_Study,
+             project_Phase, location, variables, format1, quality, process,
+             use_lim, access, citation, resource_contact, owner1, owner1,
+             distributor)
+
+##############################################################
+################ DISPLAY RESULTS  ##########################
+#############################################################
+print("""
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -136,8 +148,53 @@ html1="""
         <h1><center>Succeed!! Here are the value you entered !</center></h1>
         <h2><center> Please check the value and validate to create your xml file</center></h2>
         <fieldset>
-"""
-html2="""
+""")
+print('<h4><b>Title </b>: %s </h4>'%title)
+print('<h4><b>Abstract </b>: %s </h4>' %abstract)
+print('<h4><b>Data Type </b>: %s </h4>' %data_type)
+print('</fieldset><fieldset>')
+print('<h4><b>Geographic coordinate system</b>: %s </h4>' %geosys)
+print('<div class="row">')
+print('<h4 class="col-xs-5"><b>Longitude </b>: %s </h4>' %longitude)
+print('<h4 class="col-xs-5"><b>Latitude </b>: %s </h4>' %latitude)
+print('</div>')
+print('<div class="row">')
+print('<h4 class="col-xs-5"><b>North </b>: %s </h4>' %North)
+print('<h4 class="col-xs-5"><b>South </b>: %s </h4>' %South)
+print('</div>')
+print('<div class="row">')
+print('<h4 class="col-xs-5"><b>East </b>: %s </h4>' %East)
+print('<h4 class="col-xs-5"><b>West </b>: %s </h4>' %West)
+print('</div>')
+print('<div class="row">')
+print('<h4 class="col-xs-5"><b>Depth1 </b>: %s </h4>' %Depth1)
+print('<h4 class="col-xs-5"><b>Depth2 </b>: %s </h4>' %Depth2)
+print('</div>')
+print('</fieldset><fieldset>')
+if radiotime == 'extent':
+    print('<h4 ><b>Start date </b>: %s </h4>' %T1)
+    print('<h4 ><b>End date </b>: %s </h4>' %T2)
+elif radiotime == 'date':
+    print('<h4 ><b>Date </b>: %s </h4>' %T1)
+print('<h4><b>Creation date </b>: %s </h4>' %Creation_date)
+print('</fieldset><fieldset>')
+print('<h4><b>Formats </b>: %s </h4>' %format1)
+print('<h4><b>Subject of study </b>: %s </h4>' %subject_Study)
+print('<h4><b>Project phase </b>: %s </h4>' %project_Phase)
+print('<h4><b>Location </b>: %s </h4>' %location)
+print('<h4><b>Variables </b>: %s </h4>' %variables)
+print('</fieldset><fieldset>')
+print('<h4><b>Quality </b>: %s </h4>' %quality)
+print('<h4><b>Process step</b>: %s </h4>' %process)
+print('<h4><b>Resource contact</b>: %s </h4>' %resource_contact)
+print('</fieldset><fieldset>')
+print('<h4><b>Owner of the data</b>: %s </h4>' %owner1)
+print('<h4><b>Distributor</b>: %s </h4>' %distributor)
+print('<h4><b>Use limitation</b>: %s </h4>' %use_lim)
+print('<h4><b>Access </b>: %s </h4>' %access)
+print('<h4><b>Citation </b>: %s </h4>' %citation)
+print('<h4><b>Radiobutton</b>: %s </h4>' %radiotime)
+print("""
     </fieldset>
     <form method="post" action="webapp1.py">
     <fieldset>
@@ -172,52 +229,5 @@ html2="""
   </body>
 </html>
 
-"""
-print(html1)
-print('<h4><b>Title </b>: %s </h4>'%title)
-print('<h4><b>Abstract </b>: %s </h4>' %abstract)
-print('<h4><b>Data Type </b>: %s </h4>' %data_type)
-print('</fieldset><fieldset>')
-print('<h4><b>Geographic coordinate system</b>: %s </h4>' %geosys)
-print('<div class="row">')
-print('<h4 class="col-xs-5"><b>Longitude </b>: %s </h4>' %longitude)
-print('<h4 class="col-xs-5"><b>Latitude </b>: %s </h4>' %latitude)
-print('</div>')
-print('<div class="row">')
-print('<h4 class="col-xs-5"><b>North </b>: %s </h4>' %North)
-print('<h4 class="col-xs-5"><b>South </b>: %s </h4>' %South)
-print('</div>')
-print('<div class="row">')
-print('<h4 class="col-xs-5"><b>East </b>: %s </h4>' %East)
-print('<h4 class="col-xs-5"><b>West </b>: %s </h4>' %West)
-print('</div>')
-print('<div class="row">')
-print('<h4 class="col-xs-5"><b>Depth1 </b>: %s </h4>' %Depth1)
-print('<h4 class="col-xs-5"><b>Depth2 </b>: %s </h4>' %Depth2)
-print('</div>')
-print('</fieldset><fieldset>')
-if radiotime=='extent':
-    print('<h4 ><b>Start date </b>: %s </h4>' %T1)
-    print('<h4 ><b>End date </b>: %s </h4>' %T2)
-elif radiotime=='date':
-    print('<h4 ><b>Date </b>: %s </h4>' %T1)
-print('<h4><b>Creation date </b>: %s </h4>' %Creation_date)
-print('</fieldset><fieldset>')
-print('<h4><b>Formats </b>: %s </h4>' %format1)
-print('<h4><b>Subject of study </b>: %s </h4>' %subject_Study)
-print('<h4><b>Project phase </b>: %s </h4>' %project_Phase)
-print('<h4><b>Location </b>: %s </h4>' %location)
-print('<h4><b>Variables </b>: %s </h4>' %variables)
-print('</fieldset><fieldset>')
-print('<h4><b>Quality </b>: %s </h4>' %quality)
-print('<h4><b>Process step</b>: %s </h4>' %process)
-print('<h4><b>Resource contact</b>: %s </h4>' %resource_contact)
-print('</fieldset><fieldset>')
-print('<h4><b>Owner of the data</b>: %s </h4>' %owner1)
-print('<h4><b>Distributor</b>: %s </h4>' %distributor)
-print('<h4><b>Use limitation</b>: %s </h4>' %use_lim)
-print('<h4><b>Access </b>: %s </h4>' %access)
-print('<h4><b>Citation </b>: %s </h4>' %citation)
-print('<h4><b>Radiobutton</b>: %s </h4>' %radiotime)
-print(html2)
+""")
 
