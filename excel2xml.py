@@ -83,6 +83,7 @@ East = []
 West = []
 
 def geoloc(file, Location):
+    """Give latitude and longitude from location"""
 #    global North, South, East, West
     for k in range(0, len(Location)):
         if file == Location[k]:

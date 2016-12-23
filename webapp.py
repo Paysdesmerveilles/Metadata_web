@@ -6,90 +6,190 @@ Created on Thu Oct 27 16:29:52 2016
 """
 # Import modules for CGI handling
 import cgi
+import cgitb
 import B2d_XML2
+
+cgitb.enable()
+
+class IdentityData:
+    """Class that define data by:
+        - its title
+        -its abstract
+        -its data type"""
+
+    def __init__(self, title, abstract, data_type):
+        "Building the class"""
+        self.title = title
+        self.abstract = abstract
+        self.data_type = data_type
+
+class LocationData:
+    """ Class that gives location information:
+    -geographic coordinate system
+    -North, SOuth, East, West
+    -Depth"""
+
+    def __init__(self, geosys, north, south, east, west, depth1, depth2):
+        self.geosys = geosys
+        self.north = north
+        self.south = south
+        self.east = east
+        self.west = west
+        self.depth1 = depth1
+        self.depth2 = depth2
+
+class TimeData:
+    """Class that gives information about time:
+        -creation date of data
+        -start time, end time of experiment"""
+    def __init__(self, T1, T2, Creation_date):
+        self.T1 = T1
+        self.T2 = T2
+        self.Creation_date = Creation_date
+
+class KeywordData:
+    """Class that gives information about keywords:
+        - subject of study
+        - project phase
+        - location
+        -variable"""
+    def __init__(self, subject_study, project_phase, location, variables):
+        self.subject_study = subject_study
+        self.project_phase = project_phase
+        self.location = location
+        self.variables = variables
+
+class QualityData:
+    """class that gives information about quality of data:
+        -format1
+        - quality
+        - process
+        - use_lim
+        - access
+        - citation"""
+    def __init__(self, format1, quality, process, use_lim, access, citation):
+        self.format1 = format1
+        self.quality = quality
+        self.process = process
+        self.use_lim = use_lim
+        self.access = access
+        self.citation = citation
+
+class PersonneData:
+    """"Clas that gives information about :
+        - the distributor
+        - the owner
+        - the resource contact of the data """
+
+    def __init__(self, resource_contact, owner1, owner2, distributor):
+        self.resource_contact = resource_contact
+        self.owner1 = owner1
+        self.owner2 = owner2
+        self.distributor = distributor
 
 ##############################################################
 ########## GET THE VALUE FROM THE HTML FORM  ################
 #############################################################
+
 form = cgi.FieldStorage()
 
-title = form.getvalue("title")
-abstract = form.getvalue("abstract")
-data_type = form.getvalue("datatype")
-geosys = form.getvalue("geosys")
-longitude = form.getvalue("longitude")
-latitude = form.getvalue("latitude")
-North = form.getvalue("north")
-South = form.getvalue("south")
-East = form.getvalue("east")
-West = form.getvalue("west")
+DataID = IdentityData(form.getvalue("title"), form.getvalue("abstract"), form.getvalue("datatype"))
+
+radiogeo = form.getvalue("radiogeo")
+
+
+if radiogeo == 'point':
+    longitude = form.getvalue("longitude")
+    latitude = form.getvalue("latitude")
+    North = longitude
+    South = longitude
+    East = latitude
+    West = latitude
+elif radiogeo == 'box':
+    North = form.getvalue("north")
+    South = form.getvalue("south")
+    East = form.getvalue("east")
+    West = form.getvalue("west")
+
 Depth1 = form.getvalue("depth1")
 Depth2 = form.getvalue("depth2")
+DataLoc = LocationData(form.getvalue("geosys"), North, South, East, West, Depth1, Depth2)
+
 radiotime = form.getvalue("radiotime")
+
 if radiotime == 'extent':
     startdate = form.getvalue("startdate")
     starttime = form.getvalue("starttime")
-    T1 = startdate + 'T' + starttime
+    t1 = startdate + 'T' + starttime
     enddate = form.getvalue("enddate")
     endtime = form.getvalue("endtime")
-    T2 = enddate + 'T' + endtime
-    T3 = 1
+    t2 = enddate + 'T' + endtime
+    t3 = 1
 elif radiotime == 'date':
     date = form.getvalue("date")
     time = form.getvalue("time")
-    T1 = date + 'T' + time
-    T2 = ''
-    T3 = 0
+    t1 = date + 'T' + time
+    t2 = ''
+    t3 = 0
+
 creadate = form.getvalue("creadate")
 creatime = form.getvalue("creatime")
-Creation_date = creadate+'T'+creatime
-format1 = form.getvalue("format")
-subject_Study = form.getvalue("subject")
-project_Phase = form.getvalue("project")
-location = form.getvalue("location")
-variables = form.getvalue("variables")
-quality = form.getvalue("quality")
-process = form.getvalue("process")
-resource_contact = form.getvalue("resource")
-owner1 = form.getvalue("owner")
-distributor = form.getvalue("distributor")
-use_lim = form.getvalue("use")
-access = form.getvalue("access")
-citation = form.getvalue("citation")
-radiotime = form.getvalue("radiotime")
+creation_date = creadate+'T'+creatime
 
+DataTime = TimeData(t1, t2, creation_date)
 
+Subject_study = form.getvalue("subject")
+Project_phase = form.getvalue("project")
+Location = form.getvalue("location")
+Variables = form.getvalue("variables")
+Format1 = form.getvalue("format")
+Quality = form.getvalue("quality")
+Process = form.getvalue("process")
+Resource_contact = form.getvalue("resource")
+Owner1 = form.getvalue("owner")
+Distributor = form.getvalue("distributor")
+Use_lim = form.getvalue("use")
+Access = form.getvalue("access")
+Citation = form.getvalue("citation")
+Owner2 = form.getvalue("owner")
 
-if isinstance(format1, str):
+if isinstance(Format1, str):
     temp = []
-    temp.append(format1)
-    format1 = [format1]
-if isinstance(subject_Study, str):
+    temp.append(Format1)
+    Format1 = [Format1]
+if isinstance(Subject_study, str):
     temp = []
-    temp.append(subject_Study)
-    subject_Study = [subject_Study]
-if isinstance(project_Phase,str):
+    temp.append(Subject_study)
+    Subject_study = [Subject_study]
+if isinstance(Project_phase, str):
     temp = []
-    temp.append(project_Phase)
-    project_Phase = [project_Phase]
-if isinstance(location, str):
+    temp.append(Project_phase)
+    Project_phase = [Project_phase]
+if isinstance(Location, str):
     temp = []
-    temp.append(location)
-    location = [location]
-if isinstance(variables, str):
+    temp.append(Location)
+    Location = [Location]
+if isinstance(Variables, str):
     temp = []
-    temp.append(variables)
-    variables = [variables]
+    temp.append(Variables)
+    Variables = [Variables]
+
+DataTime = TimeData(t1, t2, creation_date)
+DataKeyword = KeywordData(Subject_study, Project_phase, Location, Variables)
+DataQuality = QualityData(Format1, Quality, Process, Use_lim, Access, Citation)
+DataPersonne = PersonneData(Resource_contact, Owner1, Owner2, Distributor)
 
 ##############################################################
 ########## TRANSFORM VALUE INTO XML METADATA  ################
 #############################################################
 
-B2d_XML2.xml(title, abstract, data_type, North, East, South,
-             West, Depth1, Depth2, T1, T2, Creation_date, subject_Study,
-             project_Phase, location, variables, format1, quality, process,
-             use_lim, access, citation, resource_contact, owner1, owner1,
-             distributor)
+#B2d_XML2.xml(title, abstract, data_type, North, East, South,
+#             West, Depth1, Depth2, T1, T2, Creation_date, subject_Study,
+#             project_Phase, location, variables, format1, quality, process,
+#             use_lim, access, citation, resource_contact, owner1, owner1,
+#             distributor)
+
+B2d_XML2.xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne)
 
 ##############################################################
 ################ DISPLAY RESULTS  ##########################
@@ -138,7 +238,7 @@ print("""
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active" href='index.py'><a href="#">Metadata implementation tool</a></li>
+            <li class="active" href='index.py'><a href='index.py'>Metadata implementation tool</a></li>
             <li><a href="upload.py">Uploading metadata</a></li>
 			<li><a href="excel.py">Excel tools</a></li>
 			<li><a href="about.py">About</a></li>
@@ -153,50 +253,50 @@ print("""
         <h2><center> Please check the value and validate to create your xml file</center></h2>
         <fieldset>
 """)
-print('<h4><b>Title </b>: %s </h4>'%title)
-print('<h4><b>Abstract </b>: %s </h4>' %abstract)
-print('<h4><b>Data Type </b>: %s </h4>' %data_type)
+print('<h4><b>Title </b>: %s </h4>'%DataID.title)
+print('<h4><b>Abstract </b>: %s </h4>' %DataID.abstract)
+print('<h4><b>Data Type </b>: %s </h4>' %DataID.data_type)
 print('</fieldset><fieldset>')
-print('<h4><b>Geographic coordinate system</b>: %s </h4>' %geosys)
+print('<h4><b>Geographic coordinate system</b>: %s </h4>' %DataLoc.geosys)
 print('<div class="row">')
-print('<h4 class="col-xs-5"><b>Longitude </b>: %s </h4>' %longitude)
-print('<h4 class="col-xs-5"><b>Latitude </b>: %s </h4>' %latitude)
+#print('<h4 class="col-xs-5"><b>Longitude </b>: %s </h4>' %longitude)
+#print('<h4 class="col-xs-5"><b>Latitude </b>: %s </h4>' %latitude)
 print('</div>')
 print('<div class="row">')
-print('<h4 class="col-xs-5"><b>North </b>: %s </h4>' %North)
-print('<h4 class="col-xs-5"><b>South </b>: %s </h4>' %South)
+print('<h4 class="col-xs-5"><b>North </b>: %s </h4>' %DataLoc.north)
+print('<h4 class="col-xs-5"><b>South </b>: %s </h4>' %DataLoc.south)
 print('</div>')
 print('<div class="row">')
-print('<h4 class="col-xs-5"><b>East </b>: %s </h4>' %East)
-print('<h4 class="col-xs-5"><b>West </b>: %s </h4>' %West)
+print('<h4 class="col-xs-5"><b>East </b>: %s </h4>' %DataLoc.east)
+print('<h4 class="col-xs-5"><b>West </b>: %s </h4>' %DataLoc.west)
 print('</div>')
 print('<div class="row">')
-print('<h4 class="col-xs-5"><b>Depth1 </b>: %s </h4>' %Depth1)
-print('<h4 class="col-xs-5"><b>Depth2 </b>: %s </h4>' %Depth2)
+print('<h4 class="col-xs-5"><b>Depth1 </b>: %s </h4>' %DataLoc.depth1)
+print('<h4 class="col-xs-5"><b>Depth2 </b>: %s </h4>' %DataLoc.depth2)
 print('</div>')
 print('</fieldset><fieldset>')
 if radiotime == 'extent':
-    print('<h4 ><b>Start date </b>: %s </h4>' %T1)
-    print('<h4 ><b>End date </b>: %s </h4>' %T2)
+    print('<h4 ><b>Start date </b>: %s </h4>' %DataTime.T1)
+    print('<h4 ><b>End date </b>: %s </h4>' %DataTime.T2)
 elif radiotime == 'date':
-    print('<h4 ><b>Date </b>: %s </h4>' %T1)
-print('<h4><b>Creation date </b>: %s </h4>' %Creation_date)
+    print('<h4 ><b>Date </b>: %s </h4>' %DataTime.T1)
+print('<h4><b>Creation date </b>: %s </h4>' %DataTime.Creation_date)
 print('</fieldset><fieldset>')
-print('<h4><b>Formats </b>: %s </h4>' %format1)
-print('<h4><b>Subject of study </b>: %s </h4>' %subject_Study)
-print('<h4><b>Project phase </b>: %s </h4>' %project_Phase)
-print('<h4><b>Location </b>: %s </h4>' %location)
-print('<h4><b>Variables </b>: %s </h4>' %variables)
+print('<h4><b>Formats </b>: %s </h4>' %DataQuality.format1)
+print('<h4><b>Subject of study </b>: %s </h4>' %DataKeyword.subject_study)
+print('<h4><b>Project phase </b>: %s </h4>' %DataKeyword.project_phase)
+print('<h4><b>Location </b>: %s </h4>' %DataKeyword.location)
+print('<h4><b>Variables </b>: %s </h4>' %DataKeyword.variables)
 print('</fieldset><fieldset>')
-print('<h4><b>Quality </b>: %s </h4>' %quality)
-print('<h4><b>Process step</b>: %s </h4>' %process)
-print('<h4><b>Resource contact</b>: %s </h4>' %resource_contact)
+print('<h4><b>Quality </b>: %s </h4>' %DataQuality.quality)
+print('<h4><b>Process step</b>: %s </h4>' %DataQuality.process)
+print('<h4><b>Resource contact</b>: %s </h4>' %DataPersonne.resource_contact)
 print('</fieldset><fieldset>')
-print('<h4><b>Owner of the data</b>: %s </h4>' %owner1)
-print('<h4><b>Distributor</b>: %s </h4>' %distributor)
-print('<h4><b>Use limitation</b>: %s </h4>' %use_lim)
-print('<h4><b>Access </b>: %s </h4>' %access)
-print('<h4><b>Citation </b>: %s </h4>' %citation)
+print('<h4><b>Owner of the data</b>: %s </h4>' %DataPersonne.owner1)
+print('<h4><b>Distributor</b>: %s </h4>' %DataPersonne.distributor)
+print('<h4><b>Use limitation</b>: %s </h4>' %DataQuality.use_lim)
+print('<h4><b>Access </b>: %s </h4>' %DataQuality.access)
+print('<h4><b>Citation </b>: %s </h4>' %DataQuality.citation)
 print('<h4><b>Radiobutton</b>: %s </h4>' %radiotime)
 print("""
     </fieldset>

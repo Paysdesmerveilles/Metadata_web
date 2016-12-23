@@ -17,15 +17,45 @@ filePath = form["path"].value
 ##############################################################
 ######### RUN THE PROGRAM THAT READ XML METADATA ############
 #############################################################
+class IdentityData:
+    """Class that define data by:
+        - its title
+        -its abstract
+        -its data type"""
 
-title, abstract, data_type, North, East, South, West, Depth1, Depth2, T1, T2, T3, t1, h1, t2, h2, Creation_date, subject_Study, project_Phase, location, variables, format1, quality, process, use_lim, access, citation, resource_contact, owner1, owner2, distributor = XML_B2d2.xml2B2d(filePath)
-print("Content-type: text/html; charset=utf-8\n")
+    def __init__(self, title, abstract, data_type):
+        "Building the class"""
+        self.title = title
+        self.abstract = abstract
+        self.data_type = data_type
+
+class LocationData:
+    """ Class that gives location information:
+    -geographic coordinate system
+    -north, SOuth, East, West
+    -Depth"""
+
+    def __init__(self, geosys, north, south, east, west, depth1, depth2):
+        self.geosys = geosys
+        self.north = north
+        self.south = south
+        self.east = east
+        self.west = west
+        self.depth1 = depth1
+        self.depth2 = depth2
+
+
+
+DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne = XML_B2d2.xml2B2d(filePath)
+#title, abstract, data_type, North, East, South, West, Depth1, Depth2, T1, T2, T3, t1, h1, t2, h2, Creation_date, subject_Study, project_Phase, location, variables, format1, quality, process, use_lim, access, citation, resource_contact, owner1, owner2, distributor 
+
 #print('%s est le chemin du fichier' %filePath)
 #Les contrôles
 
 ##############################################################
 ########## DISPLAY THE METADATA INTO THE FORM  ##############
 #############################################################
+print("Content-type: text/html; charset=utf-8\n")
 print("""
 <html lang="en">
   <head>
@@ -90,7 +120,7 @@ print("""
 <p>
 <div class="form-group row">
 <label for="title" class="col-xs-2 col-form-label">Title</label>""")
-print('<div class="col-xs-9"><input class="form-control" type="text" name="title" value="%s" required>' %title)		
+print('<div class="col-xs-9"><input class="form-control" type="text" name="title" value="%s" required>' %DataID.title)		
 print("""</div>
 	</div>
 	</p>
@@ -98,7 +128,7 @@ print("""</div>
 	<div class="form-group row">
 		<label for="abstract" class="col-xs-2 col-form-label">Abstract</label>
 		<div class="col-xs-9">""")
-print('<textarea class="form-control" name="abstract" rows="3" required>%s</textarea>' %abstract)
+print('<textarea class="form-control" name="abstract" rows="3" required>%s</textarea>' %DataID.abstract)
 print("""</div>
 	</div>
 	</p>
@@ -110,11 +140,11 @@ print("""</div>
 
 dataType_list = ['Dataset', 'Series', 'Services']
 for i in range(0, len(dataType_list)):
-    if data_type == dataType_list[i]:
+    if DataID.data_type == dataType_list[i]:
         dataType_list[i] = 0
     if dataType_list[i] != 0:
         print('<option >%s</option>' %dataType_list[i])
-print('<option selected="selected">%s</option>' %data_type)
+print('<option selected="selected">%s</option>' %DataID.data_type)
 
 print("""		</select>
 		</div>
@@ -142,12 +172,12 @@ print("""		</select>
 		<div class="row">""")
 
 #Spatial extent
-if North == South and East == West:
+if DataLoc.north == DataLoc.south and DataLoc.east == DataLoc.west:
     print("""	<input type="radio" class="col-xs-1" name="radiogeo" value="point" required checked>
     <label class="col-xs-3 col-form-label">Point **: Longitude (&degN)</label>""")
-    print('<input type="number"  min="-90" max="90" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="longitude" required>' % North)
+    print('<input type="number"  min="-90" max="90" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="longitude" required>' % DataLoc.north)
     print('<label for="lat1" class="col-xs-2 col-form-label">Latitude (&degE)</label>')
-    print('<input type="number" min="-180" max="180" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="latitude"required>' % East)
+    print('<input type="number" min="-180" max="180" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="latitude"required>' % DataLoc.east)
     print("""
           </div>
 		<div class="row">
@@ -188,16 +218,16 @@ else:
 		<div class="row">  
 		<label for="space" class="col-xs-1 col-form-label"></label>
 		  <label class="col-xs-2 col-form-label">North (&degN)</label>""")
-    print('<input type="number" min="document.getElementById("south").value" max="90" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="north"required>' %North)
+    print('<input type="number" min="document.getElementById("south").value" max="90" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="north"required>' %DataLoc.north)
     print('<label for="south" class="col-xs-2 col-form-label">South (&degN)</label>')
-    print('<input type="number" min="-90" max="90" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="south"required>' %South)
+    print('<input type="number" min="-90" max="90" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="south"required>' %DataLoc.south)
     print("""</div>
 		<div class="row">
 			<label for="space" class="col-xs-1 col-form-label"></label>
 		  <label for="east"class="col-xs-2 col-form-label">East(&degE)</label>""")
-    print('<input type="number" min="-180" max="180" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="east" required>' %East)
+    print('<input type="number" min="-180" max="180" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="east" required>' %DataLoc.east)
     print('<label for="west" class="col-xs-2 col-form-label">West (&degE)</label>')
-    print('<span id="container"><input type="number" min="-180" max="180" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="west" required></span>' %West)
+    print('<span id="container"><input type="number" min="-180" max="180" value="%f" step="0.000001" class="col-xs-2 col-form-label" name="west" required></span>' %DataLoc.west)
     print("""
 	</div>
 	</div>
@@ -205,12 +235,12 @@ else:
 	<P>""")
 #End spatial extent
 #Depth
-if isinstance(Depth1, float) and isinstance(Depth2, float):
+if isinstance(DataLoc.depth1, float) and isinstance(DataLoc.depth2, float):
     print("""<div class="row">
     	  <label for="depth" class="col-xs-2 col-form-label">Depth : From (m)</label>""")
-    print('<input type="number" class="col-xs-2 col-form-label" name="depth1" value="%f">' %Depth1)
+    print('<input type="number" class="col-xs-2 col-form-label" name="depth1" value="%f">' %DataLoc.depth1)
     print('<label for="depth2" class="col-xs-2 col-form-label">to (m)</label>')
-    print('<input type="number"  min="-7000" max="0" class="col-xs-2 col-form-label" name="depth2" value="%f">' %Depth2)
+    print('<input type="number"  min="-7000" max="0" class="col-xs-2 col-form-label" name="depth2" value="%f">' %DataLoc.depth2)
 else:
     print("""<div class="row">
     	  <label for="depth" class="col-xs-2 col-form-label">Depth : From (m)</label>
@@ -228,7 +258,7 @@ print(""" </div>
 	<p>
 	<div class="form-check">
 		<div class="row">""")
-if T3 == 1:
+if DataTime.T3 == 1:
     print('<input type="radio" class="col-xs-2"  name="radiotime" value="extent" required checked>')
     print("""
 		<label class="col-xs-3 col-form-label">Temporal extent** :</label>
@@ -238,7 +268,7 @@ if T3 == 1:
 		<label class="col-xs-3 col-form-label"></label>
 		<label class="col-xs-1 col-form-label"> Start</label>
 			<div id="datepicker" class="col-xs-3 input-append date" >""")
-    print('<input type="text" name="startdate" value="%s" ></input>'%t1)
+    print('<input type="text" name="startdate" value="%s" ></input>'%DataTime.t1)
     print("""<span class="add-on">
 					<i data-date-icon="icon-calendar"></i>
 				</span>
@@ -250,7 +280,7 @@ if T3 == 1:
 				</script>
 			</div>
 			<div id="timepicker1" class="col-xs-3 input-append date" >""")
-    print('<input type="text" name="starttime" value="%s" ></input>' %h1)
+    print('<input type="text" name="starttime" value="%s" ></input>' %DataTime.h1)
     print("""<span class="add-on">
 					<i data-time-icon="icon-time"></i>
 				</span>
@@ -266,7 +296,7 @@ if T3 == 1:
 		<label class="col-xs-3 col-form-label"></label>
 		<label class="col-xs-1 col-form-label">End</label>
 			<div id="datepicker2" class="col-xs-3 input-append date">""")
-    print('<input type="text"name="enddate" value="%s" ></input>' %t2)
+    print('<input type="text"name="enddate" value="%s" ></input>' %DataTime.t2)
     print("""	<span class="add-on">
 					<i  data-date-icon="icon-calendar"></i>
 				</span>
@@ -279,7 +309,7 @@ if T3 == 1:
 				</script>
 			</div>
 			<div id="timepicker2" class="col-xs-3 input-append date">""")
-    print('<input type="text" name="endtime" value="%s" ></input>' %h2)
+    print('<input type="text" name="endtime" value="%s" ></input>' %DataTime.h2)
     print("""
 				<span class="add-on">
 					<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
@@ -395,7 +425,7 @@ else:
     print('<input type="radio" class="col-xs-2" name="radiotime" value="date" required checked>')
     print("""<label class="col-xs-3 col-form-label">Temporal extent** : Date</label>
 			<div id="datepicker3" class="col-xs-3 input-append date">""")
-    print('<input type="text" name="date" value="%s"></input>' %t1)
+    print('<input type="text" name="date" value="%s"></input>' %DataTime.t1)
     print("""
 				<span class="add-on">
 					<i data-date-icon="icon-calendar"></i>
@@ -408,7 +438,7 @@ else:
 				</script>
 			</div>
 			<div id="timepicker3" class="col-xs-3 input-append date">""")
-    print('<input type="text" name="time" value="%s" ></input>' %h1)
+    print('<input type="text" name="time" value="%s" ></input>' %DataTime.h1)
     print("""
 				<span class="add-on">
 					<i data-time-icon="icon-time"></i>
@@ -433,7 +463,7 @@ print("""
 	<div class="row">
 	<label class="col-xs-3 col-form-label">Creation date</label>
 		<div id="datepicker4" class="col-xs-3 input-append date">""")
-(t3, h3) = Creation_date.split('T')
+(t3, h3) = DataTime.Creation_date.split('T')
 print('<input type="text" name="creadate" value="%s" required></input>' %t3)
 print("""
 				<span class="add-on">
@@ -471,8 +501,8 @@ print("""
 		<select id="listformat1" class="multiselect col-xs-4" multiple="multiple">""")
 format1_list = ['csv', 'mSEED', 'SEG-Y', 'pdf', 'jpg', 'excel', 'text']
 for i in range(0, len(format1_list)):
-    for j in range(0, len(format1)):
-        if format1[j] == format1_list[i]:
+    for j in range(0, len(DataQuality.format1)):
+        if DataQuality.format1[j] == format1_list[i]:
             format1_list[i] = 0
     if format1_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %format1_list[i])
@@ -484,8 +514,8 @@ print("""	</select>
 			<input id="button2" type="button" value="<<" />
 		</div>
 		<select class="multiselect col-xs-4" id="listformat2" multiple="multiple" rows=2 name="format" required> """)
-for j in range(0, len(format1)):
-    print('<option class="list-group-item">%s</option>' %format1[j])
+for j in range(0, len(DataQuality.format1)):
+    print('<option class="list-group-item">%s</option>' %DataQuality.format1[j])
 
 print("""
 		</select>
@@ -511,7 +541,7 @@ print("""
 	<div class="form-group row">
 		<label for="quality" class="col-xs-2 col-form-label">Quality</label>
 		<div class="col-xs-9">""")
-print('<input class="form-control" type="text" name="quality" value="%s">' %quality)
+print('<input class="form-control" type="text" name="quality" value="%s">' %DataQuality.quality)
 print("""
 		</div>
 	</div>
@@ -520,7 +550,7 @@ print("""
 	<div class="form-group row">
 		<label for="process" class="col-xs-2 col-form-label">Processing text</label>
 		<div class="col-xs-9">""")
-print('<textarea class="form-control" id="process" rows="3" name="process">%s</textarea>' %process)
+print('<textarea class="form-control" id="process" rows="3" name="process">%s</textarea>' %DataQuality.process)
 
 #Keywords:
 Subject_list = ['Hydraulics', 'Chemistry, Tracer test', 'Geology, Minerals',
@@ -556,8 +586,8 @@ print("""
 		<label class="col-xs-2 col-form-label">Subject study *</label>
 		<select id="listsubj1" class="multiselect col-xs-4" multiple="multiple">""")
 for i in range(0, len(Subject_list)):
-    for j in range(0, len(subject_Study)):
-        if subject_Study[j] == Subject_list[i]:
+    for j in range(0, len(DataKeyword.subject_study)):
+        if DataKeyword.subject_study[j] == Subject_list[i]:
             Subject_list[i] = 0
     if Subject_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %Subject_list[i])
@@ -569,8 +599,8 @@ print("""
 			<input id="button4" type="button" value="<<" />
 		</div>
 		<select class="multiselect col-xs-4" id="listsubj2" multiple="multiple" rows=2 name="subject" required> """)
-for j in range(0, len(subject_Study)):
-    print('<option class="list-group-item">%s</option>' %subject_Study[j])
+for j in range(0, len(DataKeyword.subject_study)):
+    print('<option class="list-group-item">%s</option>' %DataKeyword.subject_study[j])
 print("""
 		</select>
     </div>
@@ -595,8 +625,8 @@ print("""
 		<label class="col-xs-2 col-form-label">Project Phase *</label>
 		<select id="listproj1" class="multiselect col-xs-4" multiple="multiple">""")
 for i in range(0, len(Project_list)):
-    for j in range(0, len(project_Phase)):
-        if project_Phase[j] == Project_list[i]:
+    for j in range(0, len(DataKeyword.project_phase)):
+        if DataKeyword.project_phase[j] == Project_list[i]:
             Project_list[i] = 0
     if Project_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %Project_list[i])
@@ -608,8 +638,8 @@ print("""
 			<input id="button6" type="button" value="<<" />
 		</div>
 		<select class="multiselect col-xs-4" id="listproj2" multiple="multiple" rows=2 name="project" required>""")
-for j in range(0, len(project_Phase)):
-    print('<option class="list-group-item">%s</option>' %project_Phase[j])
+for j in range(0, len(DataKeyword.project_phase)):
+    print('<option class="list-group-item">%s</option>' %DataKeyword.project_phase[j])
 print("""
 		</select>
     </div>
@@ -634,8 +664,8 @@ print("""
 		<label class="col-xs-2 col-form-label">Location *</label>
 		<select id="listloc1" class="multiselect col-xs-4" multiple="multiple">""")
 for i in range(0, len(location_list)):
-    for j in range(0, len(location)):
-        if location[j] == location_list[i]:
+    for j in range(0, len(DataKeyword.location)):
+        if DataKeyword.location[j] == location_list[i]:
             location_list[i] = 0
     if location_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %location_list[i])
@@ -647,8 +677,8 @@ print("""
 			<input id="button8" type="button" value="<<" />
 		</div>
 		<select class="multiselect col-xs-4" id="listloc2" multiple="multiple" rows=2 name="location" required>""")
-for j in range(0, len(location)):
-    print('<option class="list-group-item">%s</option>' %location[j])
+for j in range(0, len(DataKeyword.location)):
+    print('<option class="list-group-item">%s</option>' %DataKeyword.location[j])
 print("""
 		</select>
     </div>
@@ -673,8 +703,8 @@ print("""
 		<label class="col-xs-2 col-form-label">Variables *</label>
 		<select id="listvar1" class="multiselect col-xs-4" multiple="multiple">""")
 for i in range(0, len(variable_list)):
-    for j in range(0, len(variables)):
-        if variables[j] == variable_list[i]:
+    for j in range(0, len(DataKeyword.variables)):
+        if DataKeyword.variables[j] == variable_list[i]:
             variable_list[i] = 0
     if variable_list[i] != 0:
         print('<option class="list-group-item">%s</option>' %variable_list[i])
@@ -686,8 +716,8 @@ print("""
 			<input id="button10" type="button" value="<<" />
 		</div>
 		<select class="multiselect col-xs-4" id="listvar2" multiple="multiple" rows=2 name="variables" required>""")
-for j in range(0, len(variables)):
-    print('<option class="list-group-item">%s</option>' %variables[j])
+for j in range(0, len(DataKeyword.variables)):
+    print('<option class="list-group-item">%s</option>' %DataKeyword.variables[j])
 print("""
 		</select>
     </div>
@@ -721,12 +751,12 @@ print("""
 access_constraint = ['Confidentiality Level 0: Public', 'Confidentiality Level 1: Public and traceability',
                      'Confidentiality Level 2: Restricted', 'Confidentiality Level 3: Case-by-case']
 for i in range(0, len(access_constraint)):
-    if access == access_constraint[i]:
+    if DataQuality.access == access_constraint[i]:
         access_constraint[i] = 0
     if access_constraint[i] != 0:
 
         print('<option>%s</option>' %access_constraint[i])
-print('<option selected="selected">%s</option>' %access)
+print('<option selected="selected">%s</option>' %DataQuality.access)
 print("""
 		</select>
 		</div>
@@ -735,7 +765,7 @@ print("""
 	<div class="form-group row">
 		<label for="use" class="col-xs-2 col-form-label">Use limitation</label>
 		<div class="col-xs-9">""")
-print('<input class="form-control" type="text" name="use" value="%s">' %use_lim)
+print('<input class="form-control" type="text" name="use" value="%s">' %DataQuality.use_lim)
 print("""
 		</div>
 	</div>
@@ -744,7 +774,7 @@ print("""
 	<div class="form-group row">
 		<label for="citation" class="col-xs-2 col-form-label">Citation</label>
 		<div class="col-xs-9">""")
-print('<textarea class="form-control" name="citation" rows="3" >%s</textarea>' %citation)
+print('<textarea class="form-control" name="citation" rows="3" >%s</textarea>' %DataQuality.citation)
 print("""
 	</div>
 	</div>
@@ -762,12 +792,12 @@ print("""
 		<select class="form-control"  name="owner">""")
 institution_list = ['EOST/ IPGS', 'BRGM', 'ESG', 'GEIE']
 for i in range(0, len(institution_list)):
-    if owner1 == institution_list[i]:
+    if DataPersonne.owner1 == institution_list[i]:
         institution_list[i] = 0
     if institution_list[i] != 0:
 
         print('<option>%s</option>' %institution_list[i])
-print('<option selected="selected">%s</option>' %owner1)
+print('<option selected="selected">%s</option>' %DataPersonne.owner1)
 print("""
 		</select>
 		</div>
@@ -779,11 +809,11 @@ print("""
 		<div class="col-xs-9">
 		<select class="form-control"  name="distributor">""")
 for i in range(0, len(institution_list)):
-    if owner1 == institution_list[i]:
+    if DataPersonne.distributor == institution_list[i]:
         institution_list[i] = 0
     if institution_list[i] != 0:
         print('<option>%s</option>' %institution_list[i])
-print('<option selected="selected">%s</option>' %distributor)
+print('<option selected="selected">%s</option>' %DataPersonne.distributor)
 print("""
 		</select>
 		</div>
@@ -795,11 +825,11 @@ print("""
 		<div class="col-xs-9">
 		<select class="form-control"  name="resource">""")
 for i in range(0, len(institution_list)):
-    if owner1 == institution_list[i]:
+    if DataPersonne.resource_contact == institution_list[i]:
         institution_list[i] = 0
     if institution_list[i] != 0:
         print('<option >%s</option>' %institution_list[i])
-print('<option selected="selected">%s</option>' %resource_contact)
+print('<option selected="selected">%s</option>' %DataPersonne.resource_contact)
 print("""
 		</select>
 		</div>

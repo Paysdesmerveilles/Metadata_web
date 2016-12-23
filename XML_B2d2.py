@@ -7,6 +7,84 @@ Created on Mon Oct  3 16:59:44 2016
 def xml2B2d(filePath):
     from lxml import etree
     import io
+    class IdentityData:
+        """Class that define data by:
+            - its title
+            -its abstract
+            -its data type"""
+    
+        def __init__(self, title, abstract, data_type):
+            "Building the class"""
+            self.title = title
+            self.abstract = abstract
+            self.data_type = data_type
+    
+    class LocationData:
+        """ Class that gives location information:
+        -geographic coordinate system
+        -North, SOuth, East, West
+        -Depth"""
+    
+        def __init__(self, geosys, north, south, east, west, depth1, depth2):
+            self.geosys = geosys
+            self.north = north
+            self.south = south
+            self.east = east
+            self.west = west
+            self.depth1 = depth1
+            self.depth2 = depth2
+
+    class TimeData:
+        """Class that gives information about time:
+            -creation date of data
+            -start time, end time of experiment"""
+        def __init__(self, t1, t2, h1, h2, T3, Creation_date):
+            self.t1 = t1
+            self.t2 = t2
+            self.h1 = h1
+            self.h2 = h2
+            self.T3 = T3
+            self.Creation_date = Creation_date
+    
+    class KeywordData:
+        """Class that gives information about keywords:
+            - subject of study
+            - project phase
+            - location
+            -variable"""
+        def __init__(self, subject_study, project_phase, location, variables):
+            self.subject_study = subject_study
+            self.project_phase = project_phase
+            self.location = location
+            self.variables = variables
+    
+    class QualityData:
+        """class that gives information about quality of data:
+            -format1
+            - quality
+            - process
+            - use_lim
+            - access
+            - citation"""
+        def __init__(self, format1, quality, process, use_lim, access, citation):
+            self.format1 = format1
+            self.quality = quality
+            self.process = process
+            self.use_lim = use_lim
+            self.access = access
+            self.citation = citation
+    
+    class PersonneData:
+        """"Clas that gives information about :
+            - the distributor
+            - the owner
+            - the resource contact of the data """
+    
+        def __init__(self, resource_contact, owner1, owner2, distributor):
+            self.resource_contact = resource_contact
+            self.owner1 = owner1
+            self.owner2 = owner2
+            self.distributor = distributor
 # Les variables sont chargés via le formulaire html
 # Le chargement
     doc = etree.parse(io.BytesIO(filePath))
@@ -68,6 +146,8 @@ def xml2B2d(filePath):
             Data_type_xml = e
         elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints/gmd:MD_RestrictionCode":
             access_xml = e
+        elif tree.getpath(e)=="/gmd:MD_Metadata/gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier/gmd:code/gco:CharacterString":
+            reference_xml=e
 #Remplisage du fichier xml pour chaque donnée
 
     title = Title_xml.text
@@ -80,6 +160,7 @@ def xml2B2d(filePath):
     Depth1 = float(Depth1_xml.text)
     Depth2 = float(Depth2_xml.text)
     Creation_date = Creation_date_xml.text
+    geosys = reference_xml.text
     T1 = Date1_xml.text
     (t1, h1) = T1.split('T')
     T2 = Date2_xml.text
@@ -91,15 +172,15 @@ def xml2B2d(filePath):
         t2 = None
         h2 = None
 
-    subject_Study = []
+    Subject_study = []
     Len_su = len(subject_study0_xml)
     for i in range(0, Len_su - 2):
-        subject_Study.append(subject_study0_xml[i][0].text)
+        Subject_study.append(subject_study0_xml[i][0].text)
 
-    project_Phase = []
+    Project_phase = []
     Len_pro = len(project_phase0_xml)
     for i in range(0, Len_pro - 2):
-        project_Phase.append(project_phase0_xml[i][0].text)
+        Project_phase.append(project_phase0_xml[i][0].text)
 
     location = []
     Len_loc = len(location0_xml)
@@ -134,9 +215,17 @@ def xml2B2d(filePath):
         owner2 = OW2_Organisation_xml.text
 
     resource_contact = POC_Organisation_xml.text
+    
     distributor = D_Organisation_xml.text
+    DataID = IdentityData(title, abstract, data_type)
+    DataTime = TimeData(t1, t2, h1, h2, T3, Creation_date)
+    DataLoc = LocationData(geosys, North, South, East, West, Depth1, Depth2)
+    DataKeyword = KeywordData(Subject_study, Project_phase, location, variables)
+    DataQuality = QualityData(format1, quality, process, use_lim, access, citation)
+    DataPersonne = PersonneData(resource_contact, owner1, owner2, distributor)
+    
     print(title, abstract, data_type, North, East, South, West, Depth1, Depth2,
-          T1, T2, T3, t1, h1, t2, h2, Creation_date, subject_Study, project_Phase,
+          T1, T2, T3, t1, h1, t2, h2, Creation_date, Subject_study, Project_phase,
           location, variables, format1, quality, process, use_lim, access, citation,
           resource_contact, owner1, owner2, distributor)
-    return title, abstract,data_type, North, East, South, West, Depth1, Depth2, T1, T2, T3, t1, h1, t2, h2, Creation_date, subject_Study, project_Phase, location, variables, format1, quality, process, use_lim, access, citation, resource_contact, owner1, owner2, distributor
+    return DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne
