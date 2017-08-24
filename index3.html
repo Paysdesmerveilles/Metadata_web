@@ -4,26 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
 
     <title>Metadata implementation</title>
 
-		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+		<link href="css/bootstrap-combined.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" media="screen"
-		 href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+		 href="css/bootstrap-datetimepicker.min.css">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<script type="text/javascript"
-		 src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+		 src="js/jquery.min.js">
 		</script> 
 		<script type="text/javascript"
-		 src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+		 src="js/bootstrap.min.js">
 		</script>
 		<script type="text/javascript"
-		 src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+		 src="js/bootstrap-datetimepicker.min.js">
 		</script>
-		
   </head>
   <body>
 
@@ -38,17 +36,17 @@
             <span class="icon-bar"></span>
 			<span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="welcome.py">Centre de Donn&eacutees de G&eacuteothermie Profonde</a>
+          <a class="navbar-brand" href="welcome.html">Centre de Donn&eacutees de G&eacuteothermie Profonde</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active" href='index.py'><a href="#">Metadata implementation tool</a></li>
-            <li><a href="upload.py">Uploading metadata</a></li>
-			<li><a href="excel.py">Excel tools</a></li>
-			<li><a href="about.py">About</a></li>
-            <li><a href="contact.py">Contact</a></li>
+            <li class="active" href='index3.html'><a href="index3.html">Metadata implementation tool</a></li>
+			<li  ><a href="upload.html">Uploading metadata</a></li>
+			<li  href='excel.html'><a href="excel.html">Excel tools</a></li>
+			<li ><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </nav>
 	<div class="container">
@@ -67,6 +65,14 @@
 		<label for="title" class="col-xs-2 col-form-label">Title *</label>
 		<div class="col-xs-9">
 			<input class="form-control" type="text" name="title" required>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="title" class="col-xs-2 col-form-label">Short Title *</label>
+		<div class="col-xs-9">
+			<input class="form-control" type="text" name="ID_title" required>
 		</div>
 	</div>
 	</p>
@@ -114,7 +120,7 @@
 		 <label class="col-xs-3 col-form-label">Point **: Longitude (&degN)</label>
 		  <input type="number"  min="-90" max="90" value="48.94" step="0.000001" class="col-xs-2 col-form-label" name="longitude" required>
 		  <label for="lat1" class="col-xs-2 col-form-label">Latitude (&degE)</label>
-		  <input type="number" min="-180" max="180" value="7.86" step="0.000001" class="col-xs-2 col-form-label" name="latitude"required>
+		  <input type="number" min="-180" max="180" value="7.86" step="0.000001" class="col-xs-2 col-form-label" name="latitude" required>
 		</div>
 		<div class="row">
 		<input type="radio" class="col-xs-1" name="radiogeo" value="box" required>
@@ -123,17 +129,21 @@
 		<div class="row">  
 		<label for="space" class="col-xs-1 col-form-label"></label>
 		  <label class="col-xs-2 col-form-label">North (&degN)</label>
-		  <input type="number" min="document.getElementById('south').value" max="90" value="48.94"step="0.000001" class="col-xs-2 col-form-label" name="north"required>
+		  <input type="number" max="90" value="48.94"step="0.000001" class="col-xs-2 col-form-label" name="north" id="north" required
+				onchange="document.getElementById('south').max=this.value;">
 		  <label for="south" class="col-xs-2 col-form-label">South (&degN)</label>
-		  <input type="number" min="-90" max="90" value="48.93"step="0.000001" class="col-xs-2 col-form-label" name="south"required>
+		  <input type="number" min="-90" max="90" value="48.93"step="0.000001" class="col-xs-2 col-form-label" name="south" id="south" required
+			onchange="document.getElementById('north').min=this.value;">
 		</div>
 		<div class="row">
 			<label for="space" class="col-xs-1 col-form-label"></label>
 		  <label for="east"class="col-xs-2 col-form-label">East(&degE)</label>
-		  <input type="number" min="-180" max="180" value="7.86" step="0.000001" class="col-xs-2 col-form-label" name="east" required>
+		  <input type="number" min="-180" max="180" value="7.86" step="0.000001" class="col-xs-2 col-form-label" name="east" id="east" required
+			onchange="document.getElementById('west').min=this.value;">
 		  <label for="west" class="col-xs-2 col-form-label">West (&degE)</label>
 		  <span id="container">
-		  <input type="number" min="-180" max="180" value="7.87"step="0.000001" class="col-xs-2 col-form-label" name="west" required>
+		  <input type="number" min="-180" max="180" value="7.87"step="0.000001" class="col-xs-2 col-form-label" name="west" id="west" required
+			onchange="document.getElementById('east').max=this.value;">
 		</span>
 	</div>
 	</div>
@@ -246,38 +256,6 @@
 	</div>
 	</p>
 <p>
-	<legend> Creation date </legend>
- </p>
-	<p>
-	<div class="row">
-	<label class="col-xs-3 col-form-label">Creation date</label>
-		<div id="datepicker4" class="col-xs-3 input-append date">
-				<input type="text" name="creadate" required></input>
-				<span class="add-on">
-					<i data-date-icon="icon-calendar"></i>
-				</span>
-				<script type="text/javascript">
-				  $('#datepicker4').datetimepicker({
-					format: 'yyyy-MM-dd',
-					pickTime:false
-				  });
-				</script>
-			</div>
-			<div id="timepicker4" class="col-xs-3 input-append date">
-				<input type="text" name="creatime" value="00:00:00" required></input>
-				<span class="add-on">
-					<i data-time-icon="icon-time"></i>
-				</span>
-				<script type="text/javascript">
-				  $('#timepicker4').datetimepicker({
-					format: 'hh:mm:ss',
-					pickDate: false
-				  });
-				</script>
-			</div>
-		</div>
-	</p>
-
 </fieldset>
 <fieldset>	
 	<p><h2>Processing</h2></p>
@@ -296,7 +274,7 @@
 			<br/>
 			<input id="button2" type="button" value="<<" />
 		</div>
-		<select class="multiselect col-xs-4" id="listformat2" multiple="multiple" rows=2 name="format" required>        
+		<select class="multiselect col-xs-4" id="listformat2" multiple="multiple" rows=2 name="format" selected>        
 		</select>
     </div>
 	<script language="JavaScript">
@@ -314,6 +292,21 @@
 				});
 			});
 		})
+		$(function(){
+			$("select#listformat1").dblclick(function(){
+				$("#listformat1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listformat2");
+				});
+			});
+		})
+		$(function(){
+			$("select#listformat2").dblclick(function(){
+				$("#listformat2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listformat1");
+				});
+			});
+		})
+
 	</script>
 	</p>
 	<p>
@@ -378,6 +371,20 @@
 				});
 			});
 		})
+		$(function(){
+			$("select#listsubj1").dblclick(function(){
+				$("#listsubj1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listsubj2");
+				});
+			});
+		})
+		$(function(){
+			$("select#listsubj2").dblclick(function(){
+				$("#listsubj2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listsubj1");
+				});
+			});
+		})
 	</script>
 	</p>
 		<div class="row">
@@ -411,6 +418,20 @@
 		})
 		$(function(){
 			$("#button6").click(function(){
+				$("#listproj2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listproj1");
+				});
+			});
+		})
+		$(function(){
+			$("select#listproj1").dblclick(function(){
+				$("#listproj1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listproj2");
+				});
+			});
+		})
+		$(function(){
+			$("select#listproj2").dblclick(function(){
 				$("#listproj2 > option:selected").each(function(){
 					$(this).remove().appendTo("#listproj1");
 				});
@@ -450,6 +471,20 @@
 		})
 		$(function(){
 			$("#button8").click(function(){
+				$("#listloc2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listloc1");
+				});
+			});
+		})
+		$(function(){
+			$("select#listloc1").dblclick(function(){
+				$("#listloc1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listloc2");
+				});
+			});
+		})
+		$(function(){
+			$("select#listloc2").dblclick(function(){
 				$("#listloc2 > option:selected").each(function(){
 					$(this).remove().appendTo("#listloc1");
 				});
@@ -504,6 +539,20 @@
 				});
 			});
 		})
+		$(function(){
+			$("select#listvar1").dblclick(function(){
+				$("#listvar1 > option:selected").each(function(){
+					$(this).remove().appendTo("#listvar2");
+				});
+			});
+		})
+		$(function(){
+			$("select#listvar2").dblclick(function(){
+				$("#listvar2 > option:selected").each(function(){
+					$(this).remove().appendTo("#listvar1");
+				});
+			});
+		})
 	</script>
 	</p>
 </fieldset>
@@ -517,7 +566,8 @@
 		<select class="form-control" name="access">
 		  <option>Confidentiality Level 0: Public</option>
 		  <option>Confidentiality Level 1: Public and traceability</option>
-		  <option>Confidentiality Level 2: Restricted</option>
+		  <option>Confidentiality Level 2: Restricted to the Academic community</option>
+		  <option>Confidentiality Level 2: Restricted Other</option>
              <option>Confidentiality Level 3: Case-by-case</option>
 		</select>
 		</div>
@@ -532,9 +582,9 @@
 	</p>
 	<p>
 	<div class="form-group row">
-		<label for="citation" class="col-xs-2 col-form-label">Citation</label>
+		<label for="citation" class="col-xs-2 col-form-label">Citation *</label>
 		<div class="col-xs-9">
-			<textarea class="form-control" name="citation" rows="3" ></textarea>
+			<textarea class="form-control" name="citation" rows="3" required></textarea>
 		</div>
 	</div>
 	</p>
@@ -550,6 +600,7 @@
 		<div class="col-xs-9">
 		<select class="form-control" id="datatype" name="owner">
 		  <option>EOST/ IPGS</option>
+		  <option>CDGP</option>
 		  <option>BRGM</option>
 		  <option>ESG</option>
 		  <option>GEIE</option>
@@ -563,6 +614,7 @@
 		<div class="col-xs-9">
 		<select class="form-control" id="datatype" name="distributor">
 		  <option>EOST/ IPGS</option>
+		  <option>CDGP</option>
 		  <option>BRGM</option>
 		  <option>ESG</option>
 		  <option>GEIE</option>
@@ -576,6 +628,7 @@
 		<div class="col-xs-9">
 		<select class="form-control" id="datatype" name="resource">
 		  <option>EOST/ IPGS</option>
+		  <option>CDGP</option>
 		  <option>BRGM</option>
 		  <option>ESG</option>
 		  <option>GEIE</option>
@@ -592,11 +645,8 @@
 </form>
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="js/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
 
   </body>
 </html>
