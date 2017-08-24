@@ -1,15 +1,10 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 27 16:29:52 2016
 
-@author: Standard
-"""
-# Import modules for CGI handling
 import cgi
-import cgitb
+import cgitb; cgitb.enable()  # for troubleshooting
 import B2d_XML2
-
-cgitb.enable()
+from datetime import datetime
 
 class IdentityData:
     """Class that define data by:
@@ -17,9 +12,10 @@ class IdentityData:
         -its abstract
         -its data type"""
 
-    def __init__(self, title, abstract, data_type):
+    def __init__(self, title, ID_title, abstract, data_type):
         "Building the class"""
         self.title = title
+        self.ID_title = ID_title
         self.abstract = abstract
         self.data_type = data_type
 
@@ -92,11 +88,9 @@ class PersonneData:
 #############################################################
 
 form = cgi.FieldStorage()
-
-DataID = IdentityData(form.getvalue("title"), form.getvalue("abstract"), form.getvalue("datatype"))
+DataID = IdentityData(form.getvalue("title").encode('utf-8'), form.getvalue("ID_title"), form.getvalue("abstract").encode('utf-8'), form.getvalue("datatype"))
 
 radiogeo = form.getvalue("radiogeo")
-
 
 if radiogeo == 'point':
     longitude = form.getvalue("longitude")
@@ -105,16 +99,17 @@ if radiogeo == 'point':
     South = longitude
     East = latitude
     West = latitude
-elif radiogeo == 'box':
+else:
     North = form.getvalue("north")
     South = form.getvalue("south")
     East = form.getvalue("east")
     West = form.getvalue("west")
-
 Depth1 = form.getvalue("depth1")
 Depth2 = form.getvalue("depth2")
-DataLoc = LocationData(form.getvalue("geosys"), North, South, East, West, Depth1, Depth2)
-
+if isinstance(Depth1, str):
+    DataLoc = LocationData(form.getvalue("geosys"), North, South, East, West, Depth1, Depth2)
+else:
+    DataLoc = LocationData(form.getvalue("geosys"), North, South, East, West, 'no_deep', Depth2)
 radiotime = form.getvalue("radiotime")
 
 if radiotime == 'extent':
@@ -125,16 +120,18 @@ if radiotime == 'extent':
     endtime = form.getvalue("endtime")
     t2 = enddate + 'T' + endtime
     t3 = 1
-elif radiotime == 'date':
+else:
     date = form.getvalue("date")
     time = form.getvalue("time")
-    t1 = date + 'T' + time
+    t1 = str(date) + 'T' + str(time)
     t2 = ''
     t3 = 0
 
-creadate = form.getvalue("creadate")
-creatime = form.getvalue("creatime")
-creation_date = creadate+'T'+creatime
+#creadate = form.getvalue("creadate")
+#creatime = form.getvalue("creatime")
+creadate = datetime.now().strftime('%Y-%m-%d')
+creatime = datetime.now().strftime('%H:%M:%S')
+creation_date = str(creadate)+'T'+str(creatime)
 
 DataTime = TimeData(t1, t2, creation_date)
 
@@ -144,13 +141,21 @@ Location = form.getvalue("location")
 Variables = form.getvalue("variables")
 Format1 = form.getvalue("format")
 Quality = form.getvalue("quality")
+if isinstance(Quality, str):
+    Quality = Quality.encode('utf-8')
 Process = form.getvalue("process")
+if isinstance(Process, str):
+    Process = Process.encode('utf-8')
 Resource_contact = form.getvalue("resource")
 Owner1 = form.getvalue("owner")
 Distributor = form.getvalue("distributor")
 Use_lim = form.getvalue("use")
+if isinstance(Use_lim, str):
+    Use_lim = Use_lim.encode('utf-8')
 Access = form.getvalue("access")
 Citation = form.getvalue("citation")
+if isinstance(Citation, str):
+    Citation = Citation.encode('utf-8')
 Owner2 = form.getvalue("owner")
 
 if isinstance(Format1, str):
@@ -179,21 +184,17 @@ DataKeyword = KeywordData(Subject_study, Project_phase, Location, Variables)
 DataQuality = QualityData(Format1, Quality, Process, Use_lim, Access, Citation)
 DataPersonne = PersonneData(Resource_contact, Owner1, Owner2, Distributor)
 
+
 ##############################################################
 ########## TRANSFORM VALUE INTO XML METADATA  ################
 #############################################################
-
-#B2d_XML2.xml(title, abstract, data_type, North, East, South,
-#             West, Depth1, Depth2, T1, T2, Creation_date, subject_Study,
-#             project_Phase, location, variables, format1, quality, process,
-#             use_lim, access, citation, resource_contact, owner1, owner1,
-#             distributor)
 
 B2d_XML2.xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne)
 
 ##############################################################
 ################ DISPLAY RESULTS  ##########################
 #############################################################
+print("Content-type: text/html")
 print("""
 <html lang="en">
   <head>
@@ -205,18 +206,18 @@ print("""
 
     <title>Metadata implementation</title>
 
-		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+		<link href="css/bootstrap-combined.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" media="screen"
-		 href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+		 href="css/bootstrap-datetimepicker.min.css">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<script type="text/javascript"
-		 src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+		 src="js/jquery.min.js">
 		</script> 
 		<script type="text/javascript"
-		 src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+		 src="js/bootstrap.min.js">
 		</script>
 		<script type="text/javascript"
-		 src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+		 src="js/bootstrap-datetimepicker.min.js">
 		</script>
 		
   </head>
@@ -234,26 +235,29 @@ print("""
             <span class="icon-bar"></span>
 			<span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="welcome.py">Centre de Donn&eacutees de G&eacuteothermie Profonde</a>
+          <a class="navbar-brand" href="welcome.html">Centre de Donn&eacutees de G&eacuteothermie Profonde</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active" href='index.py'><a href='index.py'>Metadata implementation tool</a></li>
-            <li><a href="upload.py">Uploading metadata</a></li>
-			<li><a href="excel.py">Excel tools</a></li>
-			<li><a href="about.py">About</a></li>
-            <li><a href="contact.py">Contact</a></li>
+            <li class="active" href='index3.html'><a href='index3.html'>Metadata implementation tool</a></li>
+            <li><a href="upload.html">Uploading metadata</a></li>
+			<li><a href="excel.html">Excel tools</a></li>
+			<li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </nav>
 
 
-        <h1><center>Succeed!! Here are the value you entered !</center></h1>
-        <h2><center> Please check the value and validate to create your xml file</center></h2>
+        <h1><center>Succeed!! Here are the value you entered </center></h1>
+        <h2><center> Please check the value. XML available below</center></h2>""")
+
+print("""   
         <fieldset>
 """)
 print('<h4><b>Title </b>: %s </h4>'%DataID.title)
+print('<h4><b>Short Title </b>: %s </h4>'%DataID.ID_title)
 print('<h4><b>Abstract </b>: %s </h4>' %DataID.abstract)
 print('<h4><b>Data Type </b>: %s </h4>' %DataID.data_type)
 print('</fieldset><fieldset>')
@@ -285,7 +289,7 @@ print('</fieldset><fieldset>')
 print('<h4><b>Formats </b>: %s </h4>' %DataQuality.format1)
 print('<h4><b>Subject of study </b>: %s </h4>' %DataKeyword.subject_study)
 print('<h4><b>Project phase </b>: %s </h4>' %DataKeyword.project_phase)
-print('<h4><b>Location </b>: %s </h4>' %DataKeyword.location)
+#print('<h4><b>Location </b>: %s </h4>' %DataKeyword.location)
 print('<h4><b>Variables </b>: %s </h4>' %DataKeyword.variables)
 print('</fieldset><fieldset>')
 print('<h4><b>Quality </b>: %s </h4>' %DataQuality.quality)
@@ -297,41 +301,27 @@ print('<h4><b>Distributor</b>: %s </h4>' %DataPersonne.distributor)
 print('<h4><b>Use limitation</b>: %s </h4>' %DataQuality.use_lim)
 print('<h4><b>Access </b>: %s </h4>' %DataQuality.access)
 print('<h4><b>Citation </b>: %s </h4>' %DataQuality.citation)
-print('<h4><b>Radiobutton</b>: %s </h4>' %radiotime)
+#print('<h4><b>Radiobutton</b>: %s </h4>' %radiotime)
 print("""
     </fieldset>
-    <form method="post" action="webapp1.py">
     <fieldset>
 	<p>
 	<h2> XML</h2>
 	</p>
- <h3>Click on the image logo to download the XML:</h3>
- <a href="File/XML_test.xml" download="XML"><center>
-  <img src="File/XML.jpg" width="104" height="142"/></center>
+ <h3>Click on the image logo to download the XML:</h3>""")
+print(' <a href="File/XML_temp.xml" download="%s.xml"><center>' % DataID.ID_title)
+print("""<img src="File/XML.jpg" width="104"/></center>
 </a>
 <p><b>Note:</b> The download attribute is not supported in Edge version 12, IE, Safari or Opera version 12 (and earlier).</p>
-
+</fieldset>""")
+print('<form method="post" action="webapp1.py?datatype=%s">'  % DataID.data_type)
+print("""<fieldset>
+<center><button class="btn btn-primary">Validate</button></center>
+</p>
 </fieldset>
-    <fieldset>
-	<p>
-	<h2> Uploading data and Validation</h2>
-	</p>
-   	<div class="row">
-<label class="custom-file col-xs-3">Uploading data</label>
-  <input type="file" id="file" class="custom-file-input">
-  <span class="custom-file-control col-xs-3"></span>
-  <center><button type="submit" class="btn btn-primary">Validate</button></center>
-</div>
-
-</form>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 
   </body>
-</html>
-
-""")
-
+</html>""")
+#</form>
