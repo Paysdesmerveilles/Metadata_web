@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Metadata implementation</title>
+
+		<link href="css/bootstrap-combined.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" media="screen"
+		 href="css/bootstrap-datetimepicker.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script type="text/javascript"
+		 src="js/jquery.min.js">
+		</script> 
+		<script type="text/javascript"
+		 src="js/bootstrap.min.js">
+		</script>
+		<script type="text/javascript"
+		 src="js/bootstrap-datetimepicker.min.js">
+		</script>
+  </head>
+  <body>
+
+	<div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="welcome.html">Centre de Donn&eacutees de G&eacuteothermie Profonde</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active" href='index3.py'><a href="index3.py">Metadata implementation tool</a></li>
+			<li  ><a href="upload.html">Uploading metadata</a></li>
+			<li  href='excel.html'><a href="excel.html">Excel tools</a></li>
+			<li ><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	<div class="container">
+		<div class="page-header">
+        <h1><center>Metadata implementation</center></h1>
+	</div>
+	</div>
+	</div>
+
+
+<form method="post" action="webapp.py">
+<fieldset>
+	<p><h2> Resource identification </h2></p>
+	<p>
+	<div class="form-group row">
+		<label for="title" class="col-xs-2 col-form-label">Title *</label>
+		<div class="col-xs-9">
+			<input class="form-control" type="text" value="$title" name="title" required>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="title" class="col-xs-2 col-form-label">Short Title *</label>
+		<div class="col-xs-9">
+			<input class="form-control" type="text" value="$id_title" name="ID_title" required>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="abstract" class="col-xs-2 col-form-label">Abstract *</label>
+		<div class="col-xs-9">
+			<textarea class="form-control" name="abstract" rows="3" required>$abstract</textarea>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="datatype" class="col-xs-2 col-form-label">Data Type *</label>
+		<div class="col-xs-9">
+		<select class="form-control" name="datatype">
+$datatype
+		</select>
+		</div>
+	</div>
+	</p>
+</fieldset>
+<fieldset>
+	<h2> Spatial and temporal extent</h2>
+
+ <p>
+	<legend> Geographic extent </legend>
+ </p>
+	<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Geographic coordinate system *</label>
+		<div class="col-xs-9">
+		<select class="form-control" name="geosys">
+		  <option>WGS84</option>
+		  <option>Lambert III</option>
+		</select>
+		</div>
+	</div>
+	</p>
+	<div class="form-check">
+		<div class="row">
+		<input type="radio" class="col-xs-1" name="radiogeo" value="point" required $radiogeo1>
+		 <label class="col-xs-3 col-form-label">Point **: Longitude (&degN)</label>
+		  <input type="number"  min="-90" max="90" value="$north" step="0.000001" class="col-xs-2 col-form-label" name="longitude" required>
+		  <label for="lat1" class="col-xs-2 col-form-label">Latitude (&degE)</label>
+		  <input type="number" min="-180" max="180" value="$east" step="0.000001" class="col-xs-2 col-form-label" name="latitude" required>
+		</div>
+		<div class="row">
+		<input type="radio" class="col-xs-1" name="radiogeo" value="box" required $radiogeo2>
+		<label class="col-xs-3 col-form-label">Bounding box **:</label>
+		</div>
+		<div class="row">  
+		<label for="space" class="col-xs-1 col-form-label"></label>
+		  <label class="col-xs-2 col-form-label">North (&degN)</label>
+		  <input type="number" max="90" value="$north" step="0.000001" class="col-xs-2 col-form-label" name="north" id="north" required
+				onchange="document.getElementById('south').max=this.value;">
+		  <label for="south" class="col-xs-2 col-form-label">South (&degN)</label>
+		  <input type="number" min="-90" max="90" value=$south step="0.000001" class="col-xs-2 col-form-label" name="south" id="south" required
+			onchange="document.getElementById('north').min=this.value;">
+		</div>
+		<div class="row">
+			<label for="space" class="col-xs-1 col-form-label"></label>
+		  <label for="east"class="col-xs-2 col-form-label">East(&degE)</label>
+		  <input type="number" min="-180" max="180" value="$east" step="0.000001" class="col-xs-2 col-form-label" name="east" id="east" required
+			onchange="document.getElementById('west').min=this.value;">
+		  <label for="west" class="col-xs-2 col-form-label">West (&degE)</label>
+		  <span id="container">
+		  <input type="number" min="-180" max="180" value="$west" step="0.000001" class="col-xs-2 col-form-label" name="west" id="west" required
+			onchange="document.getElementById('east').max=this.value;">
+		</span>
+	</div>
+	</div>
+	</p>
+	<P>
+	<div class="row">
+	  <label for="depth" class="col-xs-2 col-form-label">Depth : From (m)</label>
+	  <input type="number" class="col-xs-2 col-form-label" name="depth1" value="$depth1">
+	  <label for="depth2" class="col-xs-2 col-form-label">to (m)</label>
+	  <input type="number"  min="-7000" max="0" class="col-xs-2 col-form-label" name="depth2" value="$depth2">
+	  </div>
+	  </p>
+<p>
+	<legend> Temporal extent </legend>
+ </p>
+	<p>
+	<div class="form-check">
+		<div class="row">
+		<input type="radio" class="col-xs-2"  name="radiotime" value="extent" onclick="document.getElementById('startdate').required = true; document.getElementById('enddate').required = true; document.getElementById('date1').required = false; document.getElementById('date').checked=false" required $radiotime1>
+		<label class="col-xs-3 col-form-label">Temporal extent** :</label>
+		<label class="col-xs-3 col-form-label">Time interval</label>
+		</div>
+		<div class="row">
+		<label class="col-xs-3 col-form-label"></label>
+		<label class="col-xs-1 col-form-label"> Start</label>
+$date1
+			</div>
+		</div>
+		<div class="row">
+		<label class="col-xs-3 col-form-label"></label>
+		<label class="col-xs-1 col-form-label">End</label>
+$date2
+			</div>
+		</div>
+		</p>
+		<p>
+		<div class="row">
+			<input type="radio" class="col-xs-2" name="radiotime" value="date" onclick="document.getElementById('startdate').required = false; document.getElementById('enddate').required = false; document.getElementById('date1').required = true; document.getElementById('extent').checked=false" required $radiotime2>
+			<label class="col-xs-3 col-form-label">Temporal extent** : Date</label>
+$date3
+			</div>
+		</div>
+	</div>
+	</p>
+<p>
+</fieldset>
+<fieldset>	
+	<p><h2>Processing</h2></p>
+	<p>
+	<div class="row">
+		<label class="col-xs-2 col-form-label">Format *</label>
+		<select id="listformat1" class="multiselect col-xs-4" multiple="multiple">$format1
+		</select>
+		<div class="col-xs-1">
+			<input id="button1" type="button" value=">>" />
+			<br/>
+			<input id="button2" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listformat2" multiple="multiple" rows=2 name="format" required>
+$format2      
+		</select>
+    </div>
+$format1_button
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="quality" class="col-xs-2 col-form-label">Quality</label>
+		<div class="col-xs-9">
+			<input class="form-control" type="text" name="quality" value=$quality>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="process" class="col-xs-2 col-form-label">Processing text</label>
+		<div class="col-xs-9">
+			<textarea class="form-control" id="process" rows="3" name="process" value=$process></textarea>
+		</div>
+	</div>
+	</p>
+</fieldset>
+<fieldset>
+	<p><h2> Keywords </h2></p>
+	<p>
+	<h4> Please select at least one keyword by categories </h4>
+	</p>
+	<div class="row">
+		<label class="col-xs-2 col-form-label">Subject study *</label>
+		<select id="listsubj1" class="multiselect col-xs-4" multiple="multiple">
+$subject1
+
+		</select>
+		<div class="col-xs-1">
+			<input id="button3" type="button" value=">>" />
+			<br/>
+			<input id="button4" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listsubj2" multiple="multiple" rows=2 name="subject" required>
+$subject2        
+		</select>
+    </div>
+$subject_button
+	</p>
+		<div class="row">
+		<label class="col-xs-2 col-form-label">Project Phase *</label>
+		<select id="listproj1" class="multiselect col-xs-4" multiple="multiple">
+$project1
+		</select>
+		<div class="col-xs-1">
+			<input id="button5" type="button" value=">>" />
+			<br/>
+			<input id="button6" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listproj2" multiple="multiple" rows=2 name="project" required>  
+$project2      
+		</select>
+    </div>
+$project_button
+	</p>
+		<div class="row">
+		<label class="col-xs-2 col-form-label">Location *</label>
+		<select id="listloc1" class="multiselect col-xs-4" multiple="multiple">
+$location1
+		</select>
+		<div class="col-xs-1">
+			<input id="button7" type="button" value=">>" />
+			<br/>
+			<input id="button8" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listloc2" multiple="multiple" rows=2 name="location" required>
+$location2      
+		</select>
+    </div>
+$location_button
+	</p>
+		<div class="row">
+		<label class="col-xs-2 col-form-label">Variables *</label>
+		<select id="listvar1" class="multiselect col-xs-4" multiple="multiple">
+$variable1	  
+		</select>
+		<div class="col-xs-1">
+			<input id="button9" type="button" value=">>" />
+			<br/>
+			<input id="button10" type="button" value="<<" />
+		</div>
+		<select class="multiselect col-xs-4" id="listvar2" multiple="multiple" rows=2 name="variables" required>
+$variable2       
+		</select>
+    </div>
+$variable_button
+	</p>
+</fieldset>
+<fieldset>
+	<p><h2> Constraints </h2></p>
+	<p>
+	<p>
+	<div class="form-group row">
+		<label for="access" class="col-xs-2 col-form-label">Access constraints *</label>
+		<div class="col-xs-9">
+		<select class="form-control" name="access">
+$access
+		</select>
+		</div>
+	</div>
+	</p>
+	<div class="form-group row">
+		<label for="use" class="col-xs-2 col-form-label">Use limitation</label>
+		<div class="col-xs-9">
+			<input class="form-control" type="text" name="use" value="$use_lim">
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="citation" class="col-xs-2 col-form-label">Citation *</label>
+		<div class="col-xs-9">
+			<textarea class="form-control" name="citation" rows="3" required>$citation</textarea>
+		</div>
+	</div>
+	</p>
+
+</fieldset>
+<fieldset>
+<p>
+	<h2> Contact</h2>
+</p>
+	<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Owner of the data *</label>
+		<div class="col-xs-9">
+		<select class="form-control" id="datatype" name="owner">
+$owner
+		</select>
+		</div>
+	</div>
+	</p>
+		<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Distributor *</label>
+		<div class="col-xs-9">
+		<select class="form-control" id="datatype" name="distributor">
+$distributor
+		</select>
+		</div>
+	</div>
+	</p>
+		<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Resource contact *</label>
+		<div class="col-xs-9">
+		<select class="form-control" id="datatype" name="resource">
+$contact
+		</select>
+		</div>
+	</div>
+	</p>
+	  <p>
+   </div>
+  <center><button type="submit" class="btn btn-primary">Submit</button></center>
+</p>
+</fieldset>
+
+</form>
+
+
+    <script src="js/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+
+  </body>
+</html>
