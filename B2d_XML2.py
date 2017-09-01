@@ -8,6 +8,7 @@ Created on Mon Oct  3 09:15:57 2016
 
 def xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne):
     from lxml import etree
+    import codecs
     from copy import deepcopy
     import csv
     with open('Contact.csv', 'r', encoding='utf-8') as f:
@@ -124,21 +125,8 @@ def xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne):
             Creation_date1_xml = e
         elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL":
             url_xml = e
-
-#    print(POC_Organisation_xml.text, POC_City_xml.text, POC_Postalcode_xml.text,
-#          POC_email_xml.text, POC_Country_xml.text, Creation_date_xml.text,
-#          reference_xml.text, Title_xml.text, Abstract_xml.text,
-#          D_Organisation_xml.text, D_Adress_xml.text, D_City_xml.text,
-#          D_Postalcode_xml.text, D_Country_xml.text, D_email_xml.text, OW1_Organisation_xml.text,
-#          OW1_Adress_xml.text, OW1_City_xml.text, OW1_Postalcode_xml.text, OW1_Country_xml.text,
-#          OW1_email_xml.text, OW2_Organisation_xml.text, OW2_City_xml.text, OW2_Postalcode_xml.text,
-#          OW2_Country_xml.text, OW2_email_xml.text, subject_study_xml.text,
-#          project_phase_xml.text, location_xml.text, variable_xml.text, Use_xml.text,
-#          Date1_xml.text, Date2_xml.text, Depth1_xml.text, Depth2_xml.text,
-#          West_xml.text, East_xml.text, South_xml.text, North_xml.text,
-#          format1_xml.text, Quality_xml.text, Process_step_xml.text, Citation_xml.text,
-#          datatype_xml.attrib['codeListValue'], access_xml.attrib['codeListValue'])
-    #Remplisage du fichier xml pour chaque donnée
+        elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:name/gco:CharacterString":
+            urlname_xml = e
 
 
     Title_xml.text = DataID.title.decode('utf-8')
@@ -156,7 +144,8 @@ def xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne):
     Date2_xml.text = DataTime.T2
     Creation_date_xml.text = DataTime.Creation_date
     Creation_date1_xml.text = DataTime.Creation_date
-
+    url_xml.text = 'http://s-cdgp.u-strasbg.fr/CDGP-AAAI/comm.php?resource=%s' %DataID.ID_title
+    urlname_xml.text = DataID.ID_title
     if DataLoc.depth1 =='no_deep':
         Depth_xml.getparent().remove(Depth_xml)
     else:
@@ -235,21 +224,21 @@ def xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne):
 #        OW1_xml.remove(OW1_xml[1])
 #    if DataPersonne.owner1 == 0:
 #        OW1_xml.remove(OW1_xml[0])
-    doc.write('File/%s.xml' %DataID.ID_title, xml_declaration=True)
+    doc.write('File/XML_temp.xml', xml_declaration=True, encoding = 'utf-8')
 
 
 def condition_contact(type_contact, organisation, adress, city, post_code,
                       country, mail, contact_list):
     if type_contact == 'EOST/ IPGS':
-        variable = 1
+        variable = 0
     elif type_contact == 'CDGP':
-        variable = 2
+        variable = 1
     elif type_contact == 'BRGM':
-        variable = 3
+        variable = 2
     elif type_contact == 'ESG':
-        variable = 4
+        variable = 3
     elif type_contact == 'GEIE':
-        variable = 5
+        variable = 4
     else:
         return
     organisation.text = contact_list[variable][0]
