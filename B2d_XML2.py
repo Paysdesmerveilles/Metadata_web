@@ -6,10 +6,11 @@ Created on Mon Oct  3 09:15:57 2016
 @author: Alice FREMAND
 """
 
-def xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne):
+def xml(data):
     from lxml import etree
     import codecs
     from copy import deepcopy
+    from datetime import datetime
     import csv
     with open('Contact.csv', 'r', encoding='utf-8') as f:
         reader = csv.reader(f, delimiter=';')
@@ -69,6 +70,8 @@ def xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne):
             OW1_Country_xml = e
         elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact[2]/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString":
             OW1_email_xml = e
+        elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact[2]/gmd:CI_ResponsibleParty":
+            OW1_xml = e
         elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords[1]/gmd:MD_Keywords/gmd:keyword":
             subject_study0_xml = e
         elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords[1]/gmd:MD_Keywords/gmd:keyword/gco:CharacterString":
@@ -117,8 +120,10 @@ def xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne):
             Citation_xml = e
         elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:scope/gmd:DQ_Scope/gmd:level/gmd:MD_ScopeCode":
             datatype_xml = e
-        elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints/gco:CharacterString":
+        elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints[1]/gco:CharacterString":
             access_xml = e
+        elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints[2]/gco:CharacterString":
+            cite_xml = e
         elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:applicationSchemaInfo/gmd:MD_ApplicationSchemaInformation/gmd:name/gmd:CI_Citation/gmd:title/gco:CharacterString":
             Title1_xml = e
         elif tree.getpath(e) == "/gmd:MD_Metadata/gmd:applicationSchemaInfo/gmd:MD_ApplicationSchemaInformation/gmd:name/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:DateTime":
@@ -129,121 +134,151 @@ def xml(DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne):
             urlname_xml = e
 
 
-    Title_xml.text = DataID.title.decode('utf-8')
-    ID_title_xml.text = DataID.ID_title
-    Title1_xml.text = DataID.title.decode('utf-8')
-    Abstract_xml.text = DataID.abstract.decode('utf-8')
-    root[10][0][0][0][0][0].attrib['codeListValue'] = DataID.data_type
-    North_xml.text = str(DataLoc.north)
-    East_xml.text = str(DataLoc.east)
-    South_xml.text = str(DataLoc.south)
-    West_xml.text = str(DataLoc.west)
-    Depth1_xml.text = str(DataLoc.depth1)
-    Depth2_xml.text = str(DataLoc.depth2)
-    Date1_xml.text = DataTime.T1
-    Date2_xml.text = DataTime.T2
-    Creation_date_xml.text = DataTime.Creation_date
-    Creation_date1_xml.text = DataTime.Creation_date
-    url_xml.text = 'http://s-cdgp.u-strasbg.fr/CDGP-AAAI/comm.php?resource=%s' %DataID.ID_title
-    urlname_xml.text = DataID.ID_title
-    if DataLoc.depth1 =='no_deep':
-        Depth_xml.getparent().remove(Depth_xml)
+    Title_xml.text =data['title']
+    ID_title_xml.text = data['ID_title']
+    Title1_xml.text = data['title']
+    Abstract_xml.text = data['abstract']
+    root[10][0][0][0][0][0].attrib['codeListValue'] = data['datatype']
+    if data['radiotime'] == 'point':
+        North_xml.text = str(data['longitude'])
+        East_xml.text = str(data['latitude'])
+        South_xml.text = str(data['longitude'])
+        West_xml.text = str(data['latitude'])
+    else:            
+        North_xml.text = str(data['north'])
+        East_xml.text = str(data['east'])
+        South_xml.text = str(data['south'])
+        West_xml.text = str(data['west'])
+    if 'Depth1' in data.keys():
+        Depth1_xml.text = str(data['depth1'])
+        Depth2_xml.text = str(data['depth2'])
     else:
-    	Depth1_xml.text = str(DataLoc.depth1)
-    	Depth2_xml.text = str(DataLoc.depth2)
+        Depth_xml.getparent().remove(Depth_xml)        
 
+    if data['radiotime'] == 'extent':
+        t1 = data["startdate"]+ 'T' + data['starttime']
+        t2 = data["enddate"] + 'T' + data["endtime"]
+        t3 = 1
+    else:
+        t1 = data["date1"]+ 'T' + data["time"]
+        t2 = ''
+        t3 = 0
+    Date1_xml.text = t1
+    Date2_xml.text = t2
+    
+    creadate = datetime.now().strftime('%Y-%m-%d')
+    creatime = datetime.now().strftime('%H:%M:%S')
+    creation_date = str(creadate)+'T'+str(creatime)    
+    Creation_date_xml.text = creation_date
+    Creation_date1_xml.text = creation_date
+    
+    url_xml.text = 'http://s-cdgp.u-strasbg.fr/CDGP-AAAI/comm.php?resource=%s' %data['ID_title']
+    urlname_xml.text = data['ID_title']
+    
 
-    Len_su = len(DataKeyword.subject_study)
-    subject_study_xml.text = DataKeyword.subject_study[0]
-    if Len_su > 1:
+    Len_su = len(data['subject'])
+    if isinstance(data['subject'], list):
+        subject_study_xml.text = data['subject'][0]
         for i in range(0, Len_su - 1):
             subject_study0_xml.getparent()[i].addnext(deepcopy(subject_study0_xml))
-            subject_study0_xml.getparent()[i + 1][0].text = DataKeyword.subject_study[i + 1]
+            subject_study0_xml.getparent()[i + 1][0].text = data['subject'][i + 1]
+    else:
+        temp = []
+        temp.append(data['subject'])
+        subject_study_xml.text =[data['subject']][0]
 
-    Len_pro = len(DataKeyword.project_phase)
-    project_phase_xml.text = DataKeyword.project_phase[0]
-    if Len_pro > 1:
+    Len_pro = len(data['project'])
+    if isinstance(data['project'], list):
+        project_phase_xml.text = data['project'][0]
         for i in range(0, Len_pro - 1):
             project_phase0_xml.getparent()[i].addnext(deepcopy(project_phase0_xml))
-            project_phase0_xml.getparent()[i + 1][0].text = DataKeyword.project_phase[i + 1]
+            project_phase0_xml.getparent()[i + 1][0].text = data['project'][i + 1]
+    else:
+        temp = []
+        temp.append(data['project'])
+        project_phase_xml.text =[data['project']][0]
 
-    Len_loc = len(DataKeyword.location)
-    location_xml.text = DataKeyword.location[0]
-    if Len_loc > 1:
+    Len_loc = len(data['location'])
+    if isinstance(data['location'], list):
+        location_xml.text = data['location'][0]
         for i in range(0, Len_loc - 1):
             location0_xml.getparent()[i].addnext(deepcopy(location0_xml))
-            location0_xml.getparent()[i + 1][0].text = DataKeyword.location[i + 1]
+            location0_xml.getparent()[i + 1][0].text = data['location'][i + 1]
+    else:
+        temp = []
+        temp.append(data['location'])
+        location_xml.text =[data['location']][0]
 
 
-    Len_var = len(DataKeyword.variables)
-    variable_xml.text = DataKeyword.variables[0]
-    if Len_var > 1:
+    Len_var = len(data['variables'])
+    if isinstance(data['variables'], list):
+        variable_xml.text = data['variables'][0]
         for i in range(0, Len_var - 1):
             variable0_xml.getparent()[i].addnext(deepcopy(variable0_xml))
-            variable0_xml.getparent()[i + 1][0].text = DataKeyword.variables[i + 1]
+            variable0_xml.getparent()[i + 1][0].text = data['variables'][i + 1]
+    else:
+        temp = []
+        temp.append(data['variables'])
+        variable_xml.text =[data['variables']][0]
 
 
-    Len_for = len(DataQuality.format1)
-    format1_xml.text =DataQuality.format1[0]
-    if Len_var > 1:
+    Len_for = len(data['format'])
+    if isinstance(data['format'], list):
+        format1_xml.text =data['format'][0]
         for i in range(0, Len_for - 1):
             format0_xml.getparent()[i].addnext(deepcopy(format0_xml))
-            format0_xml.getparent()[i + 1][0].text = DataQuality.format1[i + 1]
+            format0_xml.getparent()[i + 1][0].text = data['format'][i + 1]
     else:
-        format1_xml.text = DataQuality.format1[0]
+        temp = []
+        temp.append(data['format'])
+        format1_xml.text =[data['format']][0]
 
-    if DataQuality.quality is not None:
-        Quality_xml.text = DataQuality.quality.decode('utf-8')
+
+    if 'quality' in data.keys():
+        Quality_xml.text = data['quality']
     else:
         Quality_xml.getparent().remove(Quality_xml)		
-    if DataQuality.process is not None:
-        Process_step_xml.text = DataQuality.process.decode('utf-8')
+    if 'process' in data.keys():
+        Process_step_xml.text = data['process']
     else:
         Process_step_xml.getparent().remove(Process_step_xml)	
-    if DataQuality.use_lim is not None:
-        Use_xml.text = DataQuality.use_lim.decode('utf-8')
+    if 'use' in data.keys():
+        Use_xml.text = data['use']
     else:
         Use_xml.getparent().remove(Use_xml)	
-    access_xml.text = DataQuality.access
-    if DataQuality.citation is not None:
-        Citation_xml.text = DataQuality.citation.decode('utf-8')
+    access_xml.text = data['access']
+    cite_xml.text = 'How to cite: '+ data['cite']        
+    if 'biblio' in data.keys():
+        Citation_xml.text = 'References: ' + data['biblio']
     else:
-        Citation_xml.getparent().remove(Citation_xml)	
+        Citation_xml.getparent().remove(Citation_xml)
+        
 
-    condition_contact(DataPersonne.resource_contact, POC_Organisation_xml, POC_Adress_xml,
+    condition_contact(data['resource'], POC_Organisation_xml, POC_Adress_xml,
                       POC_City_xml, POC_Postalcode_xml, POC_Country_xml,
                       POC_email_xml, contact_list)
-    condition_contact(DataPersonne.distributor, D_Organisation_xml, D_Adress_xml,
+    condition_contact(data['distributor'], D_Organisation_xml, D_Adress_xml,
                       D_City_xml, D_Postalcode_xml, D_Country_xml, D_email_xml,
                       contact_list)
-    condition_contact(DataPersonne.owner1, OW1_Organisation_xml, OW1_Adress_xml,
+    condition_contact(data['owner'], OW1_Organisation_xml, OW1_Adress_xml,
+                      OW1_City_xml, OW1_Postalcode_xml, OW1_Country_xml,
+                      OW1_email_xml, contact_list)
+    if data['owner2'] != 'None':
+        OW1_xml.getparent().addnext(deepcopy(OW1_xml.getparent()))
+        condition_contact(data['owner2'], OW1_Organisation_xml, OW1_Adress_xml,
                       OW1_City_xml, OW1_Postalcode_xml, OW1_Country_xml,
                       OW1_email_xml, contact_list)
 
-#    if DataPersonne.owner2 == 0:
-#        OW1_xml.remove(OW1_xml[1])
-#    if DataPersonne.owner1 == 0:
-#        OW1_xml.remove(OW1_xml[0])
     doc.write('File/XML_temp.xml', xml_declaration=True, encoding = 'utf-8')
 
 
 def condition_contact(type_contact, organisation, adress, city, post_code,
                       country, mail, contact_list):
-    if type_contact == 'EOST/ IPGS':
-        variable = 0
-    elif type_contact == 'CDGP':
-        variable = 1
-    elif type_contact == 'BRGM':
-        variable = 2
-    elif type_contact == 'ESG':
-        variable = 3
-    elif type_contact == 'GEIE':
-        variable = 4
-    else:
-        return
-    organisation.text = contact_list[variable][0]
-    adress.text = contact_list[variable][1]
-    city.text = contact_list[variable][3]
-    post_code.text = contact_list[variable][2]
-    country.text = contact_list[variable][4]
-    mail.text = contact_list[variable][5]
+    for variable in range(0, len(contact_list)):
+        if type_contact == contact_list[variable][0]:
+            organisation.text = contact_list[variable][0]
+            adress.text = contact_list[variable][1]
+            city.text = contact_list[variable][3]
+            post_code.text = contact_list[variable][2]
+            country.text = contact_list[variable][4]
+            mail.text = contact_list[variable][5]

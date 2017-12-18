@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Metadata implementation</title>
+
+
+		<link href="css/bootstrap-combined.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" media="screen"
+		 href="css/bootstrap-datetimepicker.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script type="text/javascript"
+		 src="js/jquery.min.js">
+		</script> 
+		<script type="text/javascript"
+		 src="js/bootstrap.min.js">
+		</script>
+		<script type="text/javascript"
+		 src="js/bootstrap-datetimepicker.min.js">
+		</script>
+  </head>
+
+  <body>
+
+	<div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="welcome.html">Centre de Donn&eacutees de G&eacuteothermie Profonde</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li href='index3.html'><a href="index3.html">Metadata implementation tool</a></li>
+            <li><a href="upload.html">Uploading metadata</a></li>
+			<li class="active" href='excel.html'><a href="excel.html">Excel tools</a></li>
+			<li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+	<div class="container">
+		<div class="page-header">
+        <h1><center>Welcome to the implementation tool of the Centre de Donn&eacutees de G&eacuteothermie Profonde</center></h1>
+	</div>
+	</div>
+
+    <h1><center>News</center></h1>
+        <h2><center>Purpose</center></h2>
+		<fieldset>
+			<div class='text'>
+			<h2>1	Preservation of numerical data and OAIS - Open archival Information System</h2>
+			<h4>The preservation of digital data is a very important issue for the implementation of the GeOrchestra platform and has to be discussed and thought during its establishment. A standard called OAIS (Open Archival Information System) has been developed for long term preservation.</h4>
+			<h3>1.1	OAIS</h3>
+			<h4>The Open Archival Information system is a conceptual model for management, archive and preservation of numerical data. Its goal is to preserve information and make it available to a designated community. The information being maintained has been deemed to need long term preservation where long term is long enough to be concerned with the impacts of changing technologies, including support for new media and data formats, or with a changing user community. The OAIS proposes a standardized system that describes the archival system structure of the data. </h4>
+			<h3>1.2	Certification and guidelines </h3>
+			<h4><p>Several organisms give certification among which the data seal of approval. This organism gives some guidelines that are very helpful for the implementation and development of the tools needed to be certified.
+The guidelines are the following:</p>
+
+<p>1.	The data producer deposits the research data in a data repository with sufficient information for others to assess the scientific and scholarly quality of the research data and compliance with disciplinary and ethical norms.</p>
+<p>2.	The data producer provides the research data in formats recommended by the data repository.</p>
+<p>3.	The data producer provides the research data together with the metadata requested by the data repository. </p>
+<p>4.	The data repository has an explicit mission in the area of digital archival and promulgates it.</p>
+<p>5.	The data repository uses due diligence to ensure compliance with legal regulations and contracts.</p>
+<p>6.	The data repository applies documented processed and procedures for managing data storage.</p>
+<p>7.	The data repository has a plan for long-term preservation of its digital assets. </p>
+<p>8.	Archiving takes place according to explicit workflows across the data life cycle.</p>
+<p>9.	The data repository assumes responsibility from the data producers for access to and availability of the digital objects. </p>
+<p>10.	The data repository enables the users to utilize the research data and refer to them.</p>
+<p>11.	The data repository ensures the integrity of the digital objects and the metadata.</p>
+<p>12.	The data and repository ensures the authenticity of the digital objects and the metadata. </p>
+<p>13.	The technical infrastructure explicitly supports the task and functions described in internationally accepted archival standards like OAIS.</p>
+<p>14.	The data consumer must comply with access regulations set by the data repository.</p>
+<p>15.	The data consumer conforms to and agrees with any codes of conduct that are generally accepted in higher education and research for the exchange and proper use of knowledge and information.</p>
+<p>16.	The data consumer respects the applicable licenses of the data repository regarding the use of the research data.</p>
+
+</p>The present document describes the different tools/workflow that should be implemented to guarantee the certification OAIS/ data Seal of Approval.</p>
+</h4>
+		<h2>2	Objectives </h2>
+		<h3>2.1	Scientific purpose </h3>
+		<h4> This project is funded by the labex G-EAU-THERMIE PROFONDE. Its goal is to develop the knowledge in the deep geothermal field by mixing academic and industrial competences and to study the structure and the function of the deep geothermal reservoir of the Upper Rhine Graben area. With the EGS pilot plant of Soultz-sous-Forets, more than 20 years of knowledge have been collected. 
+The "Centre de donn&eacutees de g&eacuteothermie profonde" (the Data center of deep geothermal energy) has been created in order to preserve and promote the data. GeOrchestra is an open source spatial data infrastructure (SDI) that will be used in order to develop the diffusion platform. This tool will be used as a data repository throughout the GeoNetwork software.
+</h4>
+<h3>2.2	Data </h3>
+<h4> The data implemented in the platform are any data that has been collected in the Upper Rhine Graben area that could give useful information for a geothermal study. That could be hydraulic, seismology, seismicity, geologic, geodesic or geophysics data</h2>
+		<h3>2.3	EPOS </h3>
+		<h4>As part of the EPOS (European Plate Observing System) project, it has been decided to work throughout the concept of episode in the first instance.  An episode is described as “a geophysical process; induced or triggered by human technological activity, posing hazard for populations, infrastructure and the environment". For our case, an episode corresponds to a stimulation phase. The Labex committed to give stimulation data for the following stimulation period: 1993, 1995, 1996, 1997, 2000, 2003, 2004 and 2005. Each episode should contain industrial and seismological data. </h4>
+
+			</div>
+			</fieldset>
+
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

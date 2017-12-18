@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:geonet="http://www.fao.org/geonetwork" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd">
   <gmd:fileIdentifier>
-    <gco:CharacterString>aa1df667-1732-438b-a3c1-d37d78801ba8</gco:CharacterString>
+    <gco:CharacterString>accc9daf-1384-48b0-9472-3d64d0391a29</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
     <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng"/>
@@ -59,7 +59,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:DateTime>2017-08-23T14:07:01</gco:DateTime>
+    <gco:DateTime>2017-11-07T14:39:10</gco:DateTime>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115:2003/19139</gco:CharacterString>
@@ -191,13 +191,6 @@
           </gmd:maintenanceAndUpdateFrequency>
         </gmd:MD_MaintenanceInformation>
       </gmd:resourceMaintenance>
-      <gmd:graphicOverview>
-        <gmd:MD_BrowseGraphic>
-          <gmd:fileName>
-            <gco:CharacterString>http://cdgp.u-strasbg.fr/CDGP-request/recup.php?resource=logo_stim93</gco:CharacterString>
-          </gmd:fileName>
-        </gmd:MD_BrowseGraphic>
-      </gmd:graphicOverview>
       <gmd:descriptiveKeywords>
         <gmd:MD_Keywords>
           <gmd:keyword>
@@ -321,6 +314,9 @@
           <gmd:otherConstraints>
             <gco:CharacterString>Level 2</gco:CharacterString>
           </gmd:otherConstraints>
+          <gmd:otherConstraints>
+            <gco:CharacterString>How to cite</gco:CharacterString>
+          </gmd:otherConstraints>
         </gmd:MD_LegalConstraints>
       </gmd:resourceConstraints>
       <gmd:spatialRepresentationType>
@@ -405,13 +401,13 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>url_ressource</gmd:URL>
+                <gmd:URL>url_resource</gmd:URL>
               </gmd:linkage>
               <gmd:protocol>
                 <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
               </gmd:protocol>
-              <gmd:name gco:nilReason="missing">
-                <gco:CharacterString/>
+              <gmd:name>
+                <gco:CharacterString>url_name</gco:CharacterString>
               </gmd:name>
               <gmd:description gco:nilReason="missing">
                 <gco:CharacterString/>

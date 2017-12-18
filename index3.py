@@ -159,7 +159,7 @@ d={'format1' : Format_to_replace, 'date1' : date1, 'date2' : date2,
    'Project_phase' : Project_to_replace, 'project_button' : project_button,
    'Location' : Location_to_replace.encode('ascii', 'xmlcharrefreplace'), 'location_button' : location_button,
    'Variable' : Variable_to_replace, 'variable_button' : variable_button,
-   'Confidentiality' : Confidentiality_to_replace, 'Contact' : Contact_to_replace}
+   'Confidentiality' : Confidentiality_to_replace, 'Contact' : Contact_to_replace.encode('ascii', 'xmlcharrefreplace')}
 
 print("Content-type: text/html; charset=utf-8\n")
 print(temp.substitute(d))

@@ -72,7 +72,7 @@
 	<div class="form-group row">
 		<label for="title" class="col-xs-2 col-form-label">Short Title *</label>
 		<div class="col-xs-9">
-			<input class="form-control" type="text" value="$id_title" name="ID_title" required>
+			<input class="form-control" type="text" value="$id_title" name="ID_title" pattern="[1-9-A-Za-z-_]{1,50}" required>
 		</div>
 	</div>
 	</p>
@@ -135,13 +135,13 @@ $datatype
 		</div>
 		<div class="row">
 			<label for="space" class="col-xs-1 col-form-label"></label>
-		  <label for="east"class="col-xs-2 col-form-label">East(&degE)</label>
-		  <input type="number" min="-180" max="180" value="$east" step="0.000001" class="col-xs-2 col-form-label" name="east" id="east" required
-			onchange="document.getElementById('west').min=this.value;">
-		  <label for="west" class="col-xs-2 col-form-label">West (&degE)</label>
-		  <span id="container">
+		  <label for="west"class="col-xs-2 col-form-label">West(&degE)</label>
 		  <input type="number" min="-180" max="180" value="$west" step="0.000001" class="col-xs-2 col-form-label" name="west" id="west" required
-			onchange="document.getElementById('east').max=this.value;">
+			onchange="document.getElementById('east').min=this.value;">
+		  <label for="east" class="col-xs-2 col-form-label">East (&degE)</label>
+		  <span id="container">
+		  <input type="number" min="-180" max="180" value="$east" step="0.000001" class="col-xs-2 col-form-label" name="east" id="east" required
+			onchange="document.getElementById('west').max=this.value;">
 		</span>
 	</div>
 	</div>
@@ -160,7 +160,7 @@ $datatype
 	<p>
 	<div class="form-check">
 		<div class="row">
-		<input type="radio" class="col-xs-2"  name="radiotime" value="extent" onclick="document.getElementById('startdate').required = true; document.getElementById('enddate').required = true; document.getElementById('date1').required = false; document.getElementById('date').checked=false" required $radiotime1>
+		<input type="radio" class="col-xs-2"  name="radiotime" value="extent" id="extent" onclick="document.getElementById('startdate').required = true; document.getElementById('enddate').required = true; document.getElementById('date1').required = false; document.getElementById('date').checked=false" required $radiotime1>
 		<label class="col-xs-3 col-form-label">Temporal extent** :</label>
 		<label class="col-xs-3 col-form-label">Time interval</label>
 		</div>
@@ -179,7 +179,7 @@ $date2
 		</p>
 		<p>
 		<div class="row">
-			<input type="radio" class="col-xs-2" name="radiotime" value="date" onclick="document.getElementById('startdate').required = false; document.getElementById('enddate').required = false; document.getElementById('date1').required = true; document.getElementById('extent').checked=false" required $radiotime2>
+			<input type="radio" class="col-xs-2" name="radiotime" value="date" id="date" onclick="document.getElementById('startdate').required = false; document.getElementById('enddate').required = false; document.getElementById('date1').required = true; document.getElementById('extent').checked=false" required $radiotime2>
 			<label class="col-xs-3 col-form-label">Temporal extent** : Date</label>
 $date3
 			</div>
@@ -218,7 +218,7 @@ $format1_button
 	<div class="form-group row">
 		<label for="process" class="col-xs-2 col-form-label">Processing text</label>
 		<div class="col-xs-9">
-			<textarea class="form-control" id="process" rows="3" name="process" value=$process></textarea>
+			<textarea class="form-control" id="process" rows="3" name="process">$process</textarea>
 		</div>
 	</div>
 	</p>
@@ -316,13 +316,20 @@ $access
 	</p>
 	<p>
 	<div class="form-group row">
-		<label for="citation" class="col-xs-2 col-form-label">Citation *</label>
+		<label class="col-xs-2 col-form-label">How to cite *</label>
 		<div class="col-xs-9">
-			<textarea class="form-control" name="citation" rows="3" required>$citation</textarea>
+			<textarea class="form-control" name="cite" rows="3" required>$cite</textarea>
 		</div>
 	</div>
 	</p>
-
+	<p>
+	<div class="form-group row">
+		<label for="citation" class="col-xs-2 col-form-label">References /Bibliography </label>
+		<div class="col-xs-9">
+			<textarea class="form-control" name="biblio" rows="3">$biblio</textarea>
+		</div>
+	</div>
+	</p>
 </fieldset>
 <fieldset>
 <p>
@@ -334,6 +341,16 @@ $access
 		<div class="col-xs-9">
 		<select class="form-control" id="datatype" name="owner">
 $owner
+		</select>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Owner 2 of the data *</label>
+		<div class="col-xs-9">
+		<select class="form-control" id="datatype" name="owner2">
+$owner2
 		</select>
 		</div>
 	</div>
@@ -372,3 +389,4 @@ $contact
 
   </body>
 </html>
+

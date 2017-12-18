@@ -72,7 +72,7 @@
 	<div class="form-group row">
 		<label for="title" class="col-xs-2 col-form-label">Short Title *</label>
 		<div class="col-xs-9">
-			<input class="form-control" type="text" name="ID_title" required>
+			<input class="form-control" type="text" name="ID_title" pattern="[1-9-A-Za-z-_]{1,50}" required>
 		</div>
 	</div>
 	</p>
@@ -137,13 +137,13 @@
 		</div>
 		<div class="row">
 			<label for="space" class="col-xs-1 col-form-label"></label>
-		  <label for="east"class="col-xs-2 col-form-label">East(&degE)</label>
-		  <input type="number" min="-180" max="180" value="7.86" step="0.000001" class="col-xs-2 col-form-label" name="east" id="east" required
-			onchange="document.getElementById('west').min=this.value;">
-		  <label for="west" class="col-xs-2 col-form-label">West (&degE)</label>
+		  <label for="west"class="col-xs-2 col-form-label">West(&degE)</label>
+		  <input type="number" min="-180" max="180" value="7.86" step="0.000001" class="col-xs-2 col-form-label" name="west" id="west" required
+			onchange="document.getElementById('east').min=this.value;">
+		  <label for="east" class="col-xs-2 col-form-label">East (&degE)</label>
 		  <span id="container">
-		  <input type="number" min="-180" max="180" value="7.87"step="0.000001" class="col-xs-2 col-form-label" name="west" id="west" required
-			onchange="document.getElementById('east').max=this.value;">
+		  <input type="number" min="-180" max="180" value="7.87"step="0.000001" class="col-xs-2 col-form-label" name="east" id="east" required
+			onchange="document.getElementById('west').max=this.value;">
 		</span>
 	</div>
 	</div>
@@ -314,9 +314,17 @@ $Confidentiality
 	</p>
 	<p>
 	<div class="form-group row">
-		<label for="citation" class="col-xs-2 col-form-label">Citation *</label>
+		<label class="col-xs-2 col-form-label">How to cite *</label>
 		<div class="col-xs-9">
-			<textarea class="form-control" name="citation" rows="3" required></textarea>
+			<textarea class="form-control" name="cite" rows="3" required></textarea>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="citation" class="col-xs-2 col-form-label">References /Bibliography </label>
+		<div class="col-xs-9">
+			<textarea class="form-control" name="biblio" rows="3"></textarea>
 		</div>
 	</div>
 	</p>
@@ -331,6 +339,17 @@ $Confidentiality
 		<label for="geosys" class="col-xs-2 col-form-label">Owner of the data *</label>
 		<div class="col-xs-9">
 		<select class="form-control" id="datatype" name="owner">
+$Contact
+		</select>
+		</div>
+	</div>
+	</p>
+	<p>
+	<div class="form-group row">
+		<label for="geosys" class="col-xs-2 col-form-label">Owner 2 of the data *</label>
+		<div class="col-xs-9">
+		<select class="form-control" id="datatype" name="owner2">
+			<option>None</option>
 $Contact
 		</select>
 		</div>
@@ -370,3 +389,4 @@ $Contact
 
   </body>
 </html>
+

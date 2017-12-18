@@ -7,6 +7,7 @@ import cgitb; cgitb.enable()  # for troubleshooting
 
 form = cgi.FieldStorage()
 datatype=form.getvalue('datatype')
+ID_title = form.getvalue('ID_title')
 
 print("Content-type: text/html")
 print("""
@@ -53,7 +54,7 @@ print("""
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active" href='index3.html'><a href='index3.html'>Metadata implementation tool</a></li>
+            <li class="active" href='index3.py'><a href='index3.py'>Metadata implementation tool</a></li>
             <li><a href="upload.html">Uploading metadata</a></li>
 			<li><a href="excel.html">Excel tools</a></li>
 			<li><a href="about.html">About</a></li>
@@ -67,7 +68,7 @@ print("""
 		<div class="page-header">""")
 if datatype=="Services":
     print("""
-        <h1><center>XML Metadata upload succeeded!</center></h1>
+        <h1><center>The XML Metadata was uploaded successfully !</center></h1>
 	</div>
 	</div>
 <form method="post" action="data1.py" enctype="multipart/form-data" >
@@ -96,7 +97,7 @@ if datatype=="Services":
     
 else:
     print("""
-        <h1><center>XML Metadata upload succeeded !</center></h1>
+        <h1><center>The XML Metadata was uploaded successfully !</center></h1>
 	</div>
 	</div>
     <h2><center>Uploading data</center></h2>
@@ -107,16 +108,38 @@ else:
 	<h2> Uploading Data</h2>
 	</p>
    	<div class="row">
+<label class="custom-file col-xs-3">Short title : </label>
+<input type="text" name="ID_title" value="%s" readonly></h4>
+	</div>
+	<div class="row">
 <label class="custom-file col-xs-3">Uploading data</label>
-  <input type="file" id="file" name="path" class="custom-file-input" required>
+  <input type="file" id="file" name="filetoimport" multiple="multiple" onchange="javascript:updateList()" required>
+<label class="custom-file col-xs-7">
+        <div id="fileList">
+        </div>
+        </label>
+</div>
   <span class="custom-file-control col-xs-3"></span>
   <center><button type="submit" value="upload" class="btn btn-primary">Upload</button></center>
 </div>
+    <script type="text/javascript">
+updateList = function() {
+  var input = document.getElementById('file');
+  var output = document.getElementById('fileList');
 
+  output.innerHTML = '<ul>';
+  for (var i = 0; i < input.files.length; ++i) {
+    output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+  }
+  output.innerHTML += '</ul>';
+}
+    </script>
 </form>
+
     </fieldset>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 
   </body>
-</html>""")
+</html>"""%ID_title)
+

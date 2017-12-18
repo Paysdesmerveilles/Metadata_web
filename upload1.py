@@ -19,7 +19,7 @@ message = form["path"].value
 ######### RUN THE PROGRAM THAT READ XML METADATA ############
 #############################################################
 
-DataID, DataLoc, DataTime, DataKeyword, DataQuality, DataPersonne = XML_B2d2.xml2B2d(message)
+data = XML_B2d2.xml2B2d(message)
 
 
 ##############################################################
@@ -140,79 +140,73 @@ with open('Confidentiality.csv', 'r', encoding='utf-8') as f:
     reader = csv.reader(f, delimiter=';')
     Confidentiality = list(reader)
 
-format_1, format_2 = liste(format1, DataQuality.format1)
-subject1, subject2 = liste(Subject_study, DataKeyword.subject_study)
-project1, project2 = liste(Project_phase, DataKeyword.project_phase)
-location1, location2 = liste(Location, DataKeyword.location)
-variable1, variable2 = liste(Variable, DataKeyword.variables)
+data['format1'], data['format2'] = liste(format1, data['forma'])
+data['subject1'], data['subject2'] = liste(Subject_study, data['subj'])
+data['project1'], data['project2'] = liste(Project_phase,data['proj'])
+location1, location2 = liste(Location, data['loc'])
+data['variable1'], data['variable2'] = liste(Variable, data['var'])
 
-
+data['location1'] = location1.encode('ascii', 'xmlcharrefreplace')
+data['location2'] = location2.encode('ascii', 'xmlcharrefreplace')
 
  ##############################################################
 ################# Template processing  ########################
 #############################################################   
 temp = Template(file.read())
-if DataTime.T3 ==1:
-    radiotime1 = 'checked'
-    radiotime2 = ''
-    date1 = java_date('datepicker', 'timepicker1', 'startdate', 'starttime',
-                      DataTime.t1, DataTime.h1)
-    date2 = java_date('datepicker2', 'timepicker2', 'enddate', 'endtime',
-                      DataTime.t2, DataTime.h2)
-    date3 = java_date('datepicker3', 'timepicker3', 'date', 'time', 
+if data['T3'] ==1:
+    data['radiotime1'] = 'checked'
+    data['radiotime2'] = ''
+    data['date1'] = java_date('datepicker', 'timepicker1', 'startdate', 'starttime',
+                      data['t1'], data['h1'])
+    data['date2'] = java_date('datepicker2', 'timepicker2', 'enddate', 'endtime',
+                      data['t2'], data['h2'])
+    data['date3'] = java_date('datepicker3', 'timepicker3', 'date1', 'time', 
                       '', '00:00:00')
 else:
-    radiotime1 = ''
-    radiotime2 = 'checked'
-    date1 = java_date('datepicker', 'timepicker1', 'startdate', 'starttime', 
+    data['radiotime1'] = ''
+    data['radiotime2'] = 'checked'
+    data['date1'] = java_date('datepicker', 'timepicker1', 'startdate', 'starttime', 
                       '', '00:00:00')
-    date2 = java_date('datepicker2', 'timepicker2', 'enddate', 'endtime',
+    data['date2'] = java_date('datepicker2', 'timepicker2', 'enddate', 'endtime',
                       '', '00:00:00')
-    date3 = java_date('datepicker3', 'timepicker3', 'date', 'time', 
-                      DataTime.t1, DataTime.h1)
+    data['date3'] = java_date('datepicker3', 'timepicker3', 'date1', 'time', 
+                      data['t1'], data['h1'])
 
-if DataLoc.east == DataLoc.west and DataLoc.south == DataLoc.north:
-    radiogeo1 = 'checked'
-    radiogeo2 = ''
+if data['east'] == data['west'] and data['south'] == data['north']:
+    data['radiogeo1'] = 'checked'
+    data['radiogeo2'] = ''
 else:
-    radiogeo1 = ''
-    radiogeo2 = 'checked'
+    data['radiogeo1'] = ''
+    data['radiogeo2'] = 'checked'
                         
-format1_button = java_button('button1', 'button2', 'listformat1', 'listformat2')
-subject_button = java_button('button3', 'button4', 'listsubj1', 'listsubj2')
-project_button =  java_button('button5', 'button6', 'listproj1', 'listproj2')
-location_button = java_button('button7', 'button8', 'listloc1', 'listloc2')
-variable_button = java_button('button9', 'button10', 'listvar1', 'listvar2')
+data['format1_button'] = java_button('button1', 'button2', 'listformat1', 'listformat2')
+data['subject_button'] = java_button('button3', 'button4', 'listsubj1', 'listsubj2')
+data['project_button'] =  java_button('button5', 'button6', 'listproj1', 'listproj2')
+data['location_button'] = java_button('button7', 'button8', 'listloc1', 'listloc2')
+data['variable_button'] = java_button('button9', 'button10', 'listvar1', 'listvar2')
 
 dataType_list = [['Dataset'], ['Series'], ['Services']]
-datatype = liste_deroulante(dataType_list, DataID.data_type)
-access = liste_deroulante(Confidentiality, DataQuality.access)
-owner = liste_deroulante(Contact, DataPersonne.owner1)
-distributor = liste_deroulante(Contact, DataPersonne.distributor)
-contact = liste_deroulante(Contact, DataPersonne.resource_contact)
- ##############################################################
-###################### DICTIONARY  ##########################
-############################################################# 
+data['datatype'] = liste_deroulante(dataType_list, data['data_type'])
+data['access'] = liste_deroulante(Confidentiality, data['access1'])
+owner = liste_deroulante(Contact, data['owner1'])
+data['owner'] = owner.encode('ascii', 'xmlcharrefreplace')
+if data['owner2'] == 'None':
+    owner2 = liste_deroulante(Contact, data['owner2'])
+    data['owner2'] = owner2.encode('ascii', 'xmlcharrefreplace')
+else:
+    owner2 = liste_deroulante(Contact, data['owner2']) + '<option >None</option>'
+    data['owner2'] =  owner2.encode('ascii', 'xmlcharrefreplace')# + '<option >None</option>'
+distributor = liste_deroulante(Contact, data['distributor1'])
+data['distributor'] = distributor.encode('ascii', 'xmlcharrefreplace')
+contact = liste_deroulante(Contact, data['resource_contact1'])
+data['contact'] = contact.encode('ascii', 'xmlcharrefreplace')
 
-d={'format1' : format_1, 'format2' : format_2, 'date1' : date1, 'date2' : date2,
-   'date3' : date3, 'format1_button' : format1_button, 'radiogeo1' : radiogeo1,
-   'radiogeo2' : radiogeo2, 'radiotime1' : radiotime1, 'radiotime2' : radiotime2,
-   'subject1' : subject1, 'subject2' : subject2, 'subject_button' : subject_button,
-   'project1' : project1, 'project2' : project2, 'project_button' : project_button,
-   'location1' : location1.encode('ascii', 'xmlcharrefreplace'),
-   'location2' : location2.encode('ascii', 'xmlcharrefreplace'), 'location_button' : location_button,
-   'variable1' : variable1, 'variable2' : variable2, 'variable_button' : variable_button,
-   'title' : DataID.title.decode('utf-8', 'ignore'), 'id_title' : DataID.ID_title,
-   'abstract' : DataID.abstract.decode('utf-8', 'ignore'), 
-   'datatype' : datatype, 'north' : DataLoc.north, 'south' : DataLoc.south,
-   'east' : DataLoc.east, 'west' : DataLoc.west, 'depth1' : DataLoc.depth1,
-   'depth2' : DataLoc.depth2, 'quality' : DataQuality.quality,
-   'process' : DataQuality.process, 'access' : access,
-   'use_lim' : DataQuality.use_lim, 
-   'citation' : DataQuality.citation.decode('utf-8', 'ignore'), 'owner' : owner,
-   'distributor' : distributor, 'contact' : contact}
-   
+
+
 
 print("Content-type: text/html; charset=utf-8\n")
-print(temp.substitute(d))
+print(temp.substitute(data))
 #print(temp.substitute(d))
+
+
+
