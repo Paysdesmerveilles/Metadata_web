@@ -5,9 +5,9 @@ The goal is to create and modificate ISO 19139 metadata that are compatible with
 # Structure of the tool
 
 The tool is divided in three parts:
-*Direct creation of the metadata using a web form
-*Upload of an already created metadata
-*Creation of metadata using Excel
+* Direct creation of the metadata using a web form
+* Upload of an already created metadata
+* Creation of metadata using Excel
 
 # Direct creation of the metadata using a web form
 The creation of the metadata using the web form is the easiest way for the user to create its metadata.The code is composed of two main parts: First, the user is asked to fill the web form (it corresponds to the `index3.py` file). When the form is validated, it is processed (`XML_b2d.py`) and the metadata can be uploaded(`webapp.py`). To get further information, please see following sections.
